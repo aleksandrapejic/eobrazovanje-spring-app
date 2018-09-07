@@ -10,10 +10,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import tseo.project.eobrazovanje.dto.StudentDto;
 import tseo.project.eobrazovanje.entity.PredispitneObaveze;
 import tseo.project.eobrazovanje.entity.Student;
+import tseo.project.eobrazovanje.notificationBot.BeanUtil;
 import tseo.project.eobrazovanje.repository.StudentRepository;
 import tseo.project.eobrazovanje.service.interfaces.StudentServiceInterface;
 
@@ -22,10 +28,17 @@ public class StudentService implements StudentServiceInterface {
 
 	@Autowired
 	StudentRepository studentRepository;
-
+	
+	
 	@Override
 	public Page<Student> findAll(String ime, String prezime, Pageable pageable) {
 		return studentRepository.findAllByImeIgnoreCaseContainsAndPrezimeIgnoreCaseContains(ime, prezime, pageable);
+	}
+	
+	@Override
+	public List<Student> findAllList() {
+		System.out.println("dosao sam dovde findalllist");
+		return studentRepository.findAll();
 	}
 
 	@Override
@@ -106,5 +119,25 @@ public class StudentService implements StudentServiceInterface {
 	public Student create(Student student) {
 		return changePassword(student);
 	}
+//////////////////////////////////////////BOT COMMANDS ///////////////////////////////////////////////////////
+
+	
+	@Override
+	public Student findOneByBrojTelefona(String broj) {
+		
+		
+		System.out.println("RADI REPO" + broj);
+		List<Student> studenti = studentRepository.findAll();
+		for(Student student: studenti){
+			System.out.println( student.getIme() + "STUDENT");
+		}
+		
+		
+		Student student = studentRepository.findOneByBrojtelefona(broj);
+		System.out.println(student + broj );
+		return student;
+	}
+	
+	
 
 }

@@ -120,4 +120,11 @@ public class Ispit {
 		this.usmeniMinimumBodova = usmeniMinimumBodova;
 	}
 
+	@Override
+	public String toString() {
+		return "Ispit iz predmeta" + predmet + ", odrzace se datuma: " + datum + ", rok za prijavu ispita je: "  + rokZaPrijavu + ".";
+	}
+	
+	
+
 }

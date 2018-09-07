@@ -44,8 +44,9 @@ public class Student extends User {
 	}
 
 	public Student(Long id, String brojIndexa, String tekuciRacun, Double stanje, String username, String password,
-			String ime, String prezime, String jmbg, String adresa) {
-		super(id, username, password, ime, prezime, jmbg, adresa, Role.STUDENT);
+			String ime, String prezime, String jmbg, String adresa, String brojtelefona) {
+		super( id,  username,password, ime, prezime, jmbg,adresa,
+				Role.STUDENT , brojtelefona);
 		this.brojIndexa = brojIndexa;
 		this.tekuciRacun = tekuciRacun;
 		this.stanje = stanje;

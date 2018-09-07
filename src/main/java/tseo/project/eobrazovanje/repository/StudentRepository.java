@@ -13,4 +13,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
 	Page<Student> findAllByImeIgnoreCaseContainsAndPrezimeIgnoreCaseContains(String ime, String prezime,
 			Pageable pageable);
+
+	Student findOneByBrojtelefona(String brojTelefona);
 }

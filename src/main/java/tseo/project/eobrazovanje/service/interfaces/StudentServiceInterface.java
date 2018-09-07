@@ -21,6 +21,8 @@ public interface StudentServiceInterface {
 	Student findByTekuciRacun(String tekuciRacun);
 
 	Student update(StudentDto dto);
+	
+	List<Student> findAllList();
 
 	List<PredispitneObaveze> getLatestPredispitneObaveze(Student student, Long predmetId, Date datum);
 
@@ -29,4 +31,6 @@ public interface StudentServiceInterface {
 	Student changePassword(Student student);
 
 	Student create(Student student);
+	
+	Student findOneByBrojTelefona(String broj_telefona);
 }

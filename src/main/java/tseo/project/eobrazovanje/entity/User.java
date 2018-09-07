@@ -1,5 +1,6 @@
 package tseo.project.eobrazovanje.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -27,6 +28,7 @@ public class User {
 	protected String prezime;
 	protected String jmbg;
 	protected String adresa;
+	protected String brojtelefona;
 	@Enumerated(EnumType.STRING)
 	protected Role role;
 
@@ -35,7 +37,7 @@ public class User {
 	}
 
 	public User(Long id, String username, String password, String ime, String prezime, String jmbg, String adresa,
-			Role role) {
+			Role role, String brojtelefona) {
 		super();
 		this.id = id;
 		this.ime = ime;
@@ -45,6 +47,7 @@ public class User {
 		this.username = username;
 		this.password = password;
 		this.adresa = adresa;
+		this.brojtelefona = brojtelefona;
 	}
 
 	public String getUsername() {
@@ -55,6 +58,15 @@ public class User {
 	@JsonProperty(value = "password")
 	public String getPassword() {
 		return password;
+	}
+
+	
+	public String getBrojTelefona() {
+		return brojtelefona;
+	}
+
+	public void setBrojTelefona(String brojtelefona) {
+		this.brojtelefona = brojtelefona;
 	}
 
 	public void setUsername(String username) {
