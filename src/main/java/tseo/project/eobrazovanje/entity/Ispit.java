@@ -122,7 +122,7 @@ public class Ispit {
 
 	@Override
 	public String toString() {
-		return "Ispit iz predmeta" + predmet + ", odrzace se datuma: " + datum + ", rok za prijavu ispita je: "  + rokZaPrijavu + ".";
+		return "Ispit iz predmeta " + predmet.getNaziv().toString() + ", odrzace se datuma: " + datum + ", rok za prijavu ispita je: "  + rokZaPrijavu + ".";
 	}
 	
 	

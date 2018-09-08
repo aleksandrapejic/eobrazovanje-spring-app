@@ -28,10 +28,10 @@ public class Predmet {
 	@OneToMany(mappedBy = "predmet")
 	@JsonIgnore
 	private Set<PredispitneObaveze> predispitneObaveze;
-	@OneToMany(mappedBy = "predmet", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "predmet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JsonIgnore
 	private Set<PredispitneObavezeSablon> predispitneObavezeSabloni;
-	@OneToMany(mappedBy = "predmet", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "predmet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JsonIgnore
 	private Set<Ispit> ispiti;
 

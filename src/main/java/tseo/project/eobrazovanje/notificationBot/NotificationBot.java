@@ -37,16 +37,18 @@ public class NotificationBot extends TelegramLongPollingBot  {
 		
 		 //check if the update has a message
         if(update.hasMessage()){
-                       	                   
+        				Long chatid = update.getMessage().getChatId();
+        				System.out.println(chatid);
                        	String messageText = update.getMessage().getText();
-                       	if(messageText == null ){
+                       	if(messageText == null && update.getMessage().getContact() != null ){
                        			messageText = BROJ_TELEFONA;
                        			System.out.println(messageText);
                        		}
                        	
                    
         				if (messageText.equals(START)) {
-        					 	        					 	
+        					 	  
+        						
         						SendMessage sendMessage = getBotCommandsService().sendMessageStart(update);        					    
 
         					     try {
@@ -70,8 +72,8 @@ public class NotificationBot extends TelegramLongPollingBot  {
         					 
 		        			    
         				}else if(messageText.equals(ISPITI_ZA_PRIJAVU)){
-        					 
-        					SendMessage sendMessage = getBotCommandsService().sendMessageIspitiZaPrijavu(update);        					    
+        					 System.out.println(chatid);
+        					SendMessage sendMessage = getBotCommandsService().sendMessageIspitiZaPrijavu(update, chatid);        					    
         					
 		        			  try {
 		        			      execute(sendMessage); // Sending our message object to user

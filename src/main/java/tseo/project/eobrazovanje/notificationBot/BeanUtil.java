@@ -8,11 +8,15 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 import tseo.project.eobrazovanje.entity.PredispitneObaveze;
+import tseo.project.eobrazovanje.repository.ChatBotIdentitetRepository;
 import tseo.project.eobrazovanje.repository.IspitRepository;
 import tseo.project.eobrazovanje.repository.PredispitneObavezeRepository;
+import tseo.project.eobrazovanje.repository.PredispitneObavezeSablonRepository;
 import tseo.project.eobrazovanje.repository.PrijavaRepository;
 import tseo.project.eobrazovanje.repository.StudentRepository;
+import tseo.project.eobrazovanje.service.ChatBotIdentitetService;
 import tseo.project.eobrazovanje.service.IspitService;
+import tseo.project.eobrazovanje.service.PredispitneObavezeSablonService;
 import tseo.project.eobrazovanje.service.PrijavaService;
 import tseo.project.eobrazovanje.service.StudentService;
 
@@ -64,6 +68,29 @@ public class BeanUtil implements ApplicationContextAware {
         return (PrijavaRepository)context.getBean("prijavaRepository");
     }
 
+    
+    public static ChatBotIdentitetService getChatIdentitetService() {
+        return (ChatBotIdentitetService)context.getBean("chatBotIdentitetService");
+    }
+    
+    
+    public static ChatBotIdentitetRepository getChatIdentitetRepo() {
+        return (ChatBotIdentitetRepository)context.getBean("chatBotIdentitetRepo");
+    }
+    
+
+    public static PredispitneObavezeSablonService getSablonService() {
+        return (PredispitneObavezeSablonService)context.getBean("sablonService");
+    }
+    
+    
+    public static PredispitneObavezeSablonRepository getSabonRepo() {
+        return (PredispitneObavezeSablonRepository)context.getBean("sablonRepo");
+    }
+    
+    
+    
+    
 
      
     @Override

@@ -32,10 +32,10 @@ public class Student extends User {
 	@JoinTable(name = "predmet_studenti")
 	@JsonIgnore
 	private Set<Predmet> predmeti;
-	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JsonIgnore
 	private Set<Prijava> prijave;
-	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JsonIgnore
 	private Set<PredispitneObaveze> predispitneObaveze;
 
