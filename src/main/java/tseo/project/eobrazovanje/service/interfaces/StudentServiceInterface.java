@@ -41,5 +41,7 @@ public interface StudentServiceInterface {
 
 	StudentDto findOutIfSubscribed(Long id);
 
+	StudentDto studentIzmenaBrojaIUpdateChatbota(Student updateStudent);
+
 
 }

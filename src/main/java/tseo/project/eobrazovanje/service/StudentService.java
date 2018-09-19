@@ -198,8 +198,24 @@ public class StudentService implements StudentServiceInterface {
 	}
 		
 	
-
-
+	@Override
+	public StudentDto studentIzmenaBrojaIUpdateChatbota(Student updateStudent){
+		
+		StudentDto dto = new StudentDto();
+		dto.setId(updateStudent.getId());
+		dto.setAdresa(updateStudent.getAdresa());
+		dto.setIme(updateStudent.getIme());
+		dto.setPrezime(updateStudent.getPrezime());
+		dto.setBrojTelefona(updateStudent.getBrojTelefona());
+		dto.setJmbg(updateStudent.getJmbg());
+		dto.setUsername(updateStudent.getUsername());
+		dto.setBrojIndexa(updateStudent.getBrojIndexa());
+		dto.setRole(Role.STUDENT);
+		System.out.println("STUDENT KONTROLER:prosao sam chatbotidentitet i sacuvao ");
+		
+		
+		return dto;
+	}
 	
 	
 
