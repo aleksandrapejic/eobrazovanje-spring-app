@@ -26,11 +26,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import tseo.project.eobrazovanje.dto.StudentDto;
+import tseo.project.eobrazovanje.entity.ChatBotIdentitet;
 import tseo.project.eobrazovanje.entity.Dokument;
 import tseo.project.eobrazovanje.entity.Ispit;
 import tseo.project.eobrazovanje.entity.Prijava;
 import tseo.project.eobrazovanje.entity.Student;
 import tseo.project.eobrazovanje.entity.Uplata;
+import tseo.project.eobrazovanje.enumeration.Role;
+import tseo.project.eobrazovanje.notificationBot.BeanUtil;
 import tseo.project.eobrazovanje.service.DokumentService;
 import tseo.project.eobrazovanje.service.interfaces.IspitServiceInterface;
 import tseo.project.eobrazovanje.service.interfaces.PredmetServiceInterface;
@@ -240,6 +243,43 @@ public class StudentController {
 		} else {
 			return new ResponseEntity(studentService.update(student), HttpStatus.OK);
 
+		}
+	}
+	
+	@PutMapping("/{id}/broj-telefona")
+	@PreAuthorize("hasAuthority('STUDENT')")
+	public ResponseEntity changePhoneNumber(@PathVariable("id") long id, @Validated @RequestBody StudentDto student,
+			Errors errors) {
+		if (errors.hasErrors()) {
+			return new ResponseEntity(errors.getAllErrors(), HttpStatus.BAD_REQUEST);
+		}
+		if (student.getId() != id) {
+			return new ResponseEntity(HttpStatus.BAD_REQUEST);
+		} else {
+			String trenutniBroj = studentService.findOne(id).getBrojTelefona();
+			
+			Student updateStudent = studentService.update(student);
+			System.out.println(trenutniBroj + "novi broj je " + updateStudent.getBrojTelefona() );
+			ChatBotIdentitet chatBotIdentitet = BeanUtil.getChatIdentitetService().findOneByPhoneNumber(trenutniBroj);
+			if(chatBotIdentitet != null){
+				studentService.updateChatBotIdentitet(trenutniBroj, updateStudent, student.isSubscribedTelegram());
+				
+			}
+			StudentDto dto = new StudentDto();
+			dto.setId(updateStudent.getId());
+			dto.setAdresa(updateStudent.getAdresa());
+			dto.setIme(updateStudent.getIme());
+			dto.setPrezime(updateStudent.getPrezime());
+			dto.setBrojTelefona(updateStudent.getBrojTelefona());
+			dto.setSubscribedTelegram(chatBotIdentitet.isSubscribedTelegram());
+			dto.setJmbg(updateStudent.getJmbg());
+			dto.setUsername(updateStudent.getUsername());
+			dto.setBrojIndexa(updateStudent.getBrojIndexa());
+			dto.setRole(Role.STUDENT);
+			System.out.println("prosao sam chatbotidentitet " + student.isSubscribedTelegram());
+			
+			return new ResponseEntity(dto, HttpStatus.OK);
+			
 		}
 	}
 

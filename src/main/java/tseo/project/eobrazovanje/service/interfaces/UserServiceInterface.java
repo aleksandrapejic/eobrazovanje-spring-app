@@ -21,4 +21,6 @@ public interface UserServiceInterface {
 
 	ResponseEntity<Void> updatePassword(User user, PasswordDto passwordDto);
 
+	
+
 }

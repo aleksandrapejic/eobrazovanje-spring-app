@@ -6,6 +6,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import tseo.project.eobrazovanje.entity.ChatBotIdentitet;
+import tseo.project.eobrazovanje.entity.Prijava;
+import tseo.project.eobrazovanje.entity.Student;
+
 @Component
 public class NotificationBot extends TelegramLongPollingBot  {
 	
@@ -73,9 +77,9 @@ public class NotificationBot extends TelegramLongPollingBot  {
 		        			    
         				}else if(messageText.equals(ISPITI_ZA_PRIJAVU)){
         					 System.out.println(chatid);
-        					SendMessage sendMessage = getBotCommandsService().sendMessageIspitiZaPrijavu(update, chatid);        					    
+        					 SendMessage sendMessage = getBotCommandsService().sendMessageIspitiZaPrijavu(update, chatid);        					    
         					
-		        			  try {
+		        			 try {
 		        			      execute(sendMessage); // Sending our message object to user
 		        			        
 		        			  } catch (TelegramApiException e) {
@@ -83,10 +87,42 @@ public class NotificationBot extends TelegramLongPollingBot  {
 		        			  }
 	        			    
         				}else if(messageText.equals(POLOZENI_ISPITI)){
-			 
+        					System.out.println(chatid);
+        					SendMessage sendMessage = getBotCommandsService().sendMessagePolozeniIspiti(update, chatid);        					    
+         					
+	 		        		try {
+	 		        			      execute(sendMessage); // Sending our message object to user
+	 		        			        
+	 		        			  } catch (TelegramApiException e) {
+	 		        			        e.printStackTrace();
+	 		        			  }
         				 
-        				}else if(messageText.equals(STANJE_RACUNA)){
-        					 
+	 		        		
+	 		        		
+	 		        		
+	 		        		
+        				}else if(messageText.equals(PRIJAVLJENI_ISPITI)){
+        					System.out.println(chatid);
+        					SendMessage sendMessage = getBotCommandsService().sendMessagePrijavljeniIspiti(update, chatid);        					    
+         					
+	 		        		try {
+	 		        			      execute(sendMessage); // Sending our message object to user
+	 		        			        
+	 		        			  } catch (TelegramApiException e) {
+	 		        			        e.printStackTrace();
+	 		        			  }
+        				 
+        				}
+        				else if(messageText.equals(STANJE_RACUNA)){
+        					System.out.println(chatid);
+        					SendMessage sendMessage = getBotCommandsService().sendMessageStanjeRacuna(update, chatid);        					    
+         					
+	 		        		try {
+	 		        			      execute(sendMessage); // Sending our message object to user
+	 		        			        
+	 		        			  } catch (TelegramApiException e) {
+	 		        			        e.printStackTrace();
+	 		        			  }
         				 }
         				 
                 
@@ -102,6 +138,35 @@ public class NotificationBot extends TelegramLongPollingBot  {
 		return "647577471:AAHvJjfRQRH3xhM8k2tAr_Z6Xm_LijMZP6c";
 	}
 	
+
+	
+	public void posaljiObavestenje(Prijava prijava, String student){
+		
+		int ocena = Math.round(prijava.getOsvojeniBodoviIspit()/10);
+		ChatBotIdentitet chatBotIdentitet = getBotCommandsService().getChatIdentitetService().findOneByPhoneNumber(student);
+		if(chatBotIdentitet.isSubscribedTelegram()){			
+			
+			 SendMessage message = new SendMessage() 
+	                    .setChatId(chatBotIdentitet.getChatId())
+	                    .setText("OBAVESTENJE O POLOZENOM ISPITU:" + prijava.getIspit().getPredmet().getNaziv() + ", bodovi: " + prijava.getOsvojeniBodoviIspit() + ", ocena: " + ocena);
+	    
+	    
+	    try {
+		      execute(message); // Sending our message object to user
+		        
+		  } catch (TelegramApiException e) {
+		        e.printStackTrace();
+		  }
+	    
+		}else{
+			
+			System.out.println("student nije pretplacen na obavestenja o polozenim ispitima");
+		}
+	   
+	}
+
+
+
 
 
 

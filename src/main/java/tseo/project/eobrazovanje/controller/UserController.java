@@ -1,5 +1,9 @@
 package tseo.project.eobrazovanje.controller;
 
+import java.util.Optional;
+
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,19 +19,33 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import tseo.project.eobrazovanje.enumeration.Role;
 
+import ch.qos.logback.core.joran.util.beans.BeanUtil;
 import tseo.project.eobrazovanje.dto.PasswordDto;
+import tseo.project.eobrazovanje.dto.StudentDto;
 import tseo.project.eobrazovanje.entity.Admin;
+import tseo.project.eobrazovanje.entity.ChatBotIdentitet;
+import tseo.project.eobrazovanje.entity.Student;
 import tseo.project.eobrazovanje.entity.User;
+import tseo.project.eobrazovanje.service.ChatBotIdentitetService;
+import tseo.project.eobrazovanje.service.StudentService;
+import tseo.project.eobrazovanje.service.interfaces.StudentServiceInterface;
 import tseo.project.eobrazovanje.service.interfaces.UserServiceInterface;
 
 @RestController
 @RequestMapping("/api/users")
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class UserController {
+	
+	
+	
 
 	@Autowired
 	UserServiceInterface userService;
+	
+	@Autowired
+	StudentServiceInterface studentService;
 
 	/**
 	 * Returns a ResponseEntity with the body containing a 
@@ -124,13 +142,23 @@ public class UserController {
 	 * @see         		User
 	 */
 	@GetMapping("/user/{username}")
-	public ResponseEntity<User> getUserByUsername(@PathVariable("username") String username) {
+	public ResponseEntity getUserByUsername(@PathVariable("username") String username) {
 		User user = userService.findByUserName(username);
+		
 		if (user != null) {
-			return ResponseEntity.ok(user);
+			if(user.getRole().equals(Role.STUDENT)){
+				System.out.println("UserController : usao sam u rolu student");
+				StudentDto student = studentService.findOutIfSubscribed(user.getId());
+				return ResponseEntity.ok(student);
+			}else{
+				System.out.println("UserController: user nije student");
+				return ResponseEntity.ok(user);
+				}
+			
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
 
 }

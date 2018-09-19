@@ -1,5 +1,7 @@
 package tseo.project.eobrazovanje.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,5 +19,7 @@ public interface PrijavaRepository extends JpaRepository<Prijava, Long> {
 	Page<Prijava> findByStudent(Student student, Pageable pageable);
 
 	Page<Prijava> findByIspit(Ispit ispit, Pageable pageable);
+
+	List<Prijava> findByStudent(Student student);
 
 }

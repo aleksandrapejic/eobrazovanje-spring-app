@@ -154,6 +154,7 @@ public class PredmetController {
 			return new ResponseEntity(errors.getAllErrors(), HttpStatus.BAD_REQUEST);
 		}
 		if (predmet.getId() != id) {
+			
 			return new ResponseEntity(HttpStatus.BAD_REQUEST);
 		} else {
 			return new ResponseEntity(predmetService.save(predmet), HttpStatus.OK);

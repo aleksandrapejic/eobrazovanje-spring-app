@@ -17,8 +17,11 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import tseo.project.eobrazovanje.dto.StudentDto;
+import tseo.project.eobrazovanje.entity.ChatBotIdentitet;
 import tseo.project.eobrazovanje.entity.PredispitneObaveze;
 import tseo.project.eobrazovanje.entity.Student;
+import tseo.project.eobrazovanje.entity.User;
+import tseo.project.eobrazovanje.enumeration.Role;
 import tseo.project.eobrazovanje.notificationBot.BeanUtil;
 import tseo.project.eobrazovanje.repository.StudentRepository;
 import tseo.project.eobrazovanje.service.interfaces.StudentServiceInterface;
@@ -74,6 +77,9 @@ public class StudentService implements StudentServiceInterface {
 				student.setAdresa(dto.getAdresa());
 			if (!dto.getBrojIndexa().equals(""))
 				student.setBrojIndexa(dto.getBrojIndexa());
+			if (!dto.getBrojTelefona().equals(""))
+				student.setBrojTelefona(dto.getBrojTelefona());
+			
 			return save(student);
 		}
 	}
@@ -133,10 +139,67 @@ public class StudentService implements StudentServiceInterface {
 		}
 		
 		
-		Student student = studentRepository.findOneByBrojtelefona(broj);
+		Student student = studentRepository.findOneByBrojTelefona(broj);
 		System.out.println(student + broj );
 		return student;
 	}
+
+	@Override
+	public void updateChatBotIdentitet(String stariBroj, Student student, boolean subscribedTelegram) {
+		
+		System.out.println("usao sam u update chat bot identiteta u student servisu");
+		ChatBotIdentitet chatBotIdentitet = BeanUtil.getChatIdentitetService().findOneByPhoneNumber(stariBroj);
+		if(chatBotIdentitet != null){
+			BeanUtil.getChatIdentitetService().updateChatBotIdentitetBroj(chatBotIdentitet, student);
+			BeanUtil.getChatIdentitetService().updateChatBotIdentitetPretplata(chatBotIdentitet, subscribedTelegram);
+			
+		}
+		else{
+			System.out.println("usao sam u else u apdejtu, nesto ne valja");
+			
+		}
+		
+			
+		}
+
+	@Override
+	public StudentDto findOutIfSubscribed(Long id) {
+		
+		Student student = findOne(id);
+		ChatBotIdentitet identitet = BeanUtil.getChatIdentitetService().findOneByPhoneNumber(student.getBrojTelefona());
+
+		if(identitet != null){
+			StudentDto dto = new StudentDto();
+			dto.setId(student.getId());
+			dto.setAdresa(student.getAdresa());
+			dto.setIme(student.getIme());
+			dto.setPrezime(student.getPrezime());
+			dto.setBrojTelefona(student.getBrojTelefona());
+			dto.setSubscribedTelegram(identitet.isSubscribedTelegram());
+			dto.setJmbg(student.getJmbg());
+			dto.setUsername(student.getUsername());
+			dto.setBrojIndexa(student.getBrojIndexa());
+			dto.setRole(Role.STUDENT);
+			return dto;
+		}
+		else{
+			StudentDto dto = new StudentDto();
+			dto.setId(student.getId());
+			dto.setAdresa(student.getAdresa());
+			dto.setIme(student.getIme());
+			dto.setPrezime(student.getPrezime());
+			dto.setBrojTelefona(student.getBrojTelefona());
+			dto.setJmbg(student.getJmbg());
+			dto.setUsername(student.getUsername());
+			dto.setBrojIndexa(student.getBrojIndexa());
+			dto.setRole(Role.STUDENT);
+			return dto;
+		}
+	}
+		
+	
+
+
 	
 	
 

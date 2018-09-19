@@ -18,12 +18,12 @@ public class ChatBotIdentitet {
 	protected String firstName;
 	protected String lastName;
 	protected String phoneNumber;
+	protected boolean subscribedTelegram;
 	
 	
 	
 	
-	
-	public ChatBotIdentitet(Long id, Long chatId, Integer userId, String firstName, String lastName, String phoneNumber) {
+	public ChatBotIdentitet(Long id, Long chatId, Integer userId, String firstName, String lastName, String phoneNumber, boolean subscribedTelegram) {
 		super();
 		this.id = id;
 		this.chatId = chatId;
@@ -31,6 +31,19 @@ public class ChatBotIdentitet {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.phoneNumber = phoneNumber;
+		this.subscribedTelegram = subscribedTelegram;
+	}
+
+
+
+	public boolean isSubscribedTelegram() {
+		return subscribedTelegram;
+	}
+
+
+
+	public void setSubscribedTelegram(boolean subscribedTelegram) {
+		this.subscribedTelegram = subscribedTelegram;
 	}
 
 
@@ -111,6 +124,9 @@ public class ChatBotIdentitet {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
+
+
+
 
 	
 }

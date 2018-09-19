@@ -1,5 +1,7 @@
 package tseo.project.eobrazovanje.dto;
 
+import tseo.project.eobrazovanje.enumeration.Role;
+
 public class StudentDto {
 
 	private long id;
@@ -10,13 +12,16 @@ public class StudentDto {
 	private String username;
 	private String password;
 	private String adresa;
+	private String brojTelefona;
+	private boolean subscribedTelegram;
+	private Role role;
 
 	public StudentDto() {
 
 	}
 
 	public StudentDto(String username, String password, String ime, String prezime, String jmbg, String brojIndexa,
-			String adresa) {
+			String adresa, String brojTelefona, boolean subscribedTelegram, Role role) {
 		super();
 		this.ime = ime;
 		this.prezime = prezime;
@@ -25,6 +30,35 @@ public class StudentDto {
 		this.username = username;
 		this.password = password;
 		this.adresa = adresa;
+		this.brojTelefona = brojTelefona;
+		this.subscribedTelegram = subscribedTelegram;
+		this.role = role;
+	}
+
+	
+	
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public boolean isSubscribedTelegram() {
+		return subscribedTelegram;
+	}
+
+	public void setSubscribedTelegram(boolean subscribedTelegram) {
+		this.subscribedTelegram = subscribedTelegram;
+	}
+
+	public String getBrojTelefona() {
+		return brojTelefona;
+	}
+
+	public void setBrojTelefona(String brojTelefona) {
+		this.brojTelefona = brojTelefona;
 	}
 
 	public String getUsername() {

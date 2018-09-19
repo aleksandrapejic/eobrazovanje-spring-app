@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tseo.project.eobrazovanje.dto.PrijavaDto;
 import tseo.project.eobrazovanje.entity.Prijava;
+import tseo.project.eobrazovanje.entity.Student;
+import tseo.project.eobrazovanje.notificationBot.BeanUtil;
+import tseo.project.eobrazovanje.notificationBot.NotificationBot;
 import tseo.project.eobrazovanje.service.interfaces.IspitServiceInterface;
 import tseo.project.eobrazovanje.service.interfaces.NastavnikServiceInterface;
 import tseo.project.eobrazovanje.service.interfaces.PrijavaServiceInterface;
@@ -101,9 +104,20 @@ public class PrijavaController {
 			if (prijava == null) {
 				return new ResponseEntity(HttpStatus.BAD_REQUEST);
 			} else {
+				if(prijava.isOcenjeno()){
+					System.out.println("dosao sam do slanja notif o oceni");
+					Student student = studentService.findOne(dto.getStudent());
+					
+					getBot().posaljiObavestenje(prijava, student.getBrojTelefona() );
+				}
 				return new ResponseEntity(prijava, HttpStatus.CREATED);
 			}
 		}
+	}
+
+	private NotificationBot getBot() {
+		
+		return BeanUtil.getBot();
 	}
 
 }

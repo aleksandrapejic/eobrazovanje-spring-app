@@ -1,11 +1,15 @@
 package tseo.project.eobrazovanje.notificationBot;
 
 import javax.annotation.PreDestroy;
+import javax.management.Notification;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.generics.BotSession;
 
 import tseo.project.eobrazovanje.entity.PredispitneObaveze;
 import tseo.project.eobrazovanje.repository.ChatBotIdentitetRepository;
@@ -17,6 +21,7 @@ import tseo.project.eobrazovanje.repository.StudentRepository;
 import tseo.project.eobrazovanje.service.ChatBotIdentitetService;
 import tseo.project.eobrazovanje.service.IspitService;
 import tseo.project.eobrazovanje.service.PredispitneObavezeSablonService;
+import tseo.project.eobrazovanje.service.PredmetService;
 import tseo.project.eobrazovanje.service.PrijavaService;
 import tseo.project.eobrazovanje.service.StudentService;
 
@@ -88,8 +93,22 @@ public class BeanUtil implements ApplicationContextAware {
         return (PredispitneObavezeSablonRepository)context.getBean("sablonRepo");
     }
     
+    public static BotSession makeABot(){
+    	 TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
+    	    try {
+    	    	System.out.println("pravim bota iz utila");
+    	    	NotificationBot bot = new NotificationBot();
+    	    	return  telegramBotsApi.registerBot(bot);       	    	
+    	    } catch (TelegramApiException e) {
+    	    	System.out.println("nesto je pukloo bato");
+    	       return null;
+    	    }
+    }
     
     
+    public static NotificationBot getBot() {
+        return (NotificationBot)context.getBean("notificationBot");
+    }
     
 
      
@@ -105,4 +124,8 @@ public class BeanUtil implements ApplicationContextAware {
     public void resetStatics() {
                   context=null;
 }
+
+	public static PredmetService getPredmetService() {
+		 return (PredmetService)context.getBean("predmetService");
+	}
 }

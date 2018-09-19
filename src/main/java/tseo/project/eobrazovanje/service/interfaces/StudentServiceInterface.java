@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import tseo.project.eobrazovanje.dto.StudentDto;
 import tseo.project.eobrazovanje.entity.PredispitneObaveze;
 import tseo.project.eobrazovanje.entity.Student;
+import tseo.project.eobrazovanje.entity.User;
 
 public interface StudentServiceInterface {
 
@@ -32,5 +33,13 @@ public interface StudentServiceInterface {
 
 	Student create(Student student);
 	
-	Student findOneByBrojTelefona(String broj_telefona);
+	Student findOneByBrojTelefona(String brojTelefona);
+
+
+	void updateChatBotIdentitet(String stariBroj, Student updateStudent, boolean subscribedTelegram);
+
+
+	StudentDto findOutIfSubscribed(Long id);
+
+
 }

@@ -29,7 +29,7 @@ public class Nastavnik extends User {
 
 	public Nastavnik(Long id, String username, String password, String ime, String prezime, String jmbg,
 			String adresa, String broj_telefona) {
-		super(id, username, password, ime, prezime, jmbg, adresa, Role.NASTAVNIK, broj_telefona);
+		super(id, username, password, ime, prezime, jmbg, adresa, Role.NASTAVNIK);
 	}
 
 	public Set<Predmet> getPredmeti() {

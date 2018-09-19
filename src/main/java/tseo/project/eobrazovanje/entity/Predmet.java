@@ -19,10 +19,10 @@ public class Predmet {
 	private String oznaka;
 	@NotNull
 	private int espb;
-	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "predmeti")
+	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "predmeti")
 	@JsonIgnore
 	private Set<Nastavnik> nastavnici;
-	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "predmeti")
+	@ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "predmeti")
 	@JsonIgnore
 	private Set<Student> studenti;
 	@OneToMany(mappedBy = "predmet")
@@ -118,5 +118,13 @@ public class Predmet {
 	public void setPredispitneObavezeSabloni(Set<PredispitneObavezeSablon> predispitneObavezeSabloni) {
 		this.predispitneObavezeSabloni = predispitneObavezeSabloni;
 	}
+
+	@Override
+	public String toString() {
+		return "Naziv predmeta: " + naziv + ", Oznaka predmeta :" + oznaka + ", ESPB bodovi: " + espb + ".";
+	}
+	
+	
+	
 
 }

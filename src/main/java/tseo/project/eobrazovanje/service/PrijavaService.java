@@ -1,6 +1,7 @@
 package tseo.project.eobrazovanje.service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -65,6 +66,7 @@ public class PrijavaService implements PrijavaServiceInterface {
 
 	@Override
 	public Prijava save(PrijavaDto dto) {
+		System.out.println("stigao sam do cuvanja prijave" + dto);
 		Ispit ispit = ispitService.findOne(dto.getIspit());
 		Student student = studentService.findOne(dto.getStudent());
 
@@ -76,6 +78,7 @@ public class PrijavaService implements PrijavaServiceInterface {
 		}
 
 		Prijava prijava = new Prijava();
+		System.out.println("stigao sam do pravljenja prijave" + prijava);
 		prijava.setIspit(ispit);
 		prijava.setDatumPrijave(new Date());
 		prijava.setStudent(student);
@@ -97,7 +100,7 @@ public class PrijavaService implements PrijavaServiceInterface {
 		}
 		prijava.setOsvojeniBodoviUsmeni(0F);
 		prijava.setOsvojeniBodoviIspit(prijava.getPredispitniBodovi());
-
+		System.out.println("stigao sam do cuvanja prijave" + prijava);
 		return save(prijava);
 	}
 
@@ -139,9 +142,16 @@ public class PrijavaService implements PrijavaServiceInterface {
 	public Page<Prijava> getPrijavaByStudent(Student student, Pageable pageable) {
 		return prijavaRepository.findByStudent(student, pageable);
 	}
+	
 
 	public Page<Prijava> getByIspit(Ispit ispit, Pageable pageable) {
 		return prijavaRepository.findByIspit(ispit, pageable);
 	}
+	
+	@Override
+	public List<Prijava> getPrijavljeniIspiti(Student student) {
+		return prijavaRepository.findByStudent(student);
+	}
+	
 
 }

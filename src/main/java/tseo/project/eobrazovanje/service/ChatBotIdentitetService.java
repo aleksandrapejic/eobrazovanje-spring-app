@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.telegram.telegrambots.meta.api.objects.Contact;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import tseo.project.eobrazovanje.entity.ChatBotIdentitet;
+import tseo.project.eobrazovanje.entity.Student;
 import tseo.project.eobrazovanje.repository.ChatBotIdentitetRepository;
 import tseo.project.eobrazovanje.service.interfaces.ChatBotIdentitetServiceInterface;
 
@@ -63,7 +65,22 @@ public class ChatBotIdentitetService implements ChatBotIdentitetServiceInterface
 	public ChatBotIdentitet findOneByChatId(Long chatId) {
 		return repo.findOneByChatId(chatId);
 	}
-
 	
+
+	public ChatBotIdentitet updateChatBotIdentitetBroj(ChatBotIdentitet chatIdentitet, Student student) {
+
+		 System.out.println("cuvam novi broj upravo u chatbotidentitet");
+		chatIdentitet.setPhoneNumber(student.getBrojTelefona());
+		 System.out.println("broj: " + student.getBrojTelefona());
+		return repo.save(chatIdentitet);
+	}
+
+	public ChatBotIdentitet updateChatBotIdentitetPretplata(ChatBotIdentitet chatIdentitet, boolean subscribedTelegram) {
+
+		 System.out.println("cuvam pretplacenost upravo u chatbotidentitet");
+		chatIdentitet.setSubscribedTelegram(subscribedTelegram);
+		
+		return repo.save(chatIdentitet);
+	}
 
 }

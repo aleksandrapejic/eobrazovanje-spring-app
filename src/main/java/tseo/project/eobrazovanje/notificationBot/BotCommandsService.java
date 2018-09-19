@@ -3,6 +3,7 @@ package tseo.project.eobrazovanje.notificationBot;
 import java.util.ArrayList;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -15,9 +16,13 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 
 import tseo.project.eobrazovanje.entity.ChatBotIdentitet;
 import tseo.project.eobrazovanje.entity.Ispit;
+import tseo.project.eobrazovanje.entity.Predmet;
+import tseo.project.eobrazovanje.entity.Prijava;
 import tseo.project.eobrazovanje.entity.Student;
 import tseo.project.eobrazovanje.service.ChatBotIdentitetService;
 import tseo.project.eobrazovanje.service.IspitService;
+import tseo.project.eobrazovanje.service.PredmetService;
+import tseo.project.eobrazovanje.service.PrijavaService;
 import tseo.project.eobrazovanje.service.StudentService;
 
 @Service
@@ -32,15 +37,24 @@ public class BotCommandsService  {
 	public static final String MENI = "meni";
 	
 	
-	private StudentService getStudentService() {
+	StudentService getStudentService() {
         return BeanUtil.getStudentService();
+    }
+	
+	private PrijavaService getPrijavaService() {
+        return BeanUtil.getPrijavaService();
     }
 	
 	private IspitService getIspitService() {
         return BeanUtil.getIspitService();
     }
 	
-	private ChatBotIdentitetService getChatIdentitetService() {
+	private PredmetService getPredmetService() {
+        return BeanUtil.getPredmetService();
+    }
+	
+	
+	ChatBotIdentitetService getChatIdentitetService() {
         return BeanUtil.getChatIdentitetService();
     }
 	
@@ -141,28 +155,87 @@ public class BotCommandsService  {
 
 	
 	// kod za pravljenje nove poruke kao sablon ??
-	public SendMessage sendMessagePolozeniIspiti(Update update){
+	public SendMessage sendMessagePolozeniIspiti(Update update, Long chatId){
 		
-	    SendMessage message = new SendMessage() 
-	                    .setChatId(update.getMessage().getChatId())
-	                    .setText(update.getMessage().getText());
-	    message.setReplyMarkup(getKeyboardMenuOptions());    
-	    
-	    return message; 
-	}
-	
-	// kod za pravljenje nove poruke kao sablon 
-	public SendMessage sendMessageIspitiZaPrijavu(Update update, Long chatId){
-		
-		
-		System.out.println(  "evo ga student, ulazim u ispite i  " + chatId);
+		System.out.println(  "evo ga student, ulazim u polozene ispite i  " + chatId);
 
 		if(chatId != null){
 			
 			ChatBotIdentitet chatBotIdentitet = getChatIdentitetService().findOneByChatId(chatId);
 			
 			System.out.println(chatBotIdentitet.getPhoneNumber() + "evo ga studentov broj" );
-			System.out.println(chatBotIdentitet.getFirstName() + "evo ga student, ulazim u ispite ");
+			System.out.println(chatBotIdentitet.getFirstName() + "evo ga student, ulazim u polozene ispite ");
+			Student student = getStudentService().findOneByBrojTelefona(chatBotIdentitet.getPhoneNumber());
+			Set<Predmet> polozeniPredmeti = getPredmetService().getPolozeniPredmeti(student);
+			String predmeti = "";
+		
+			for(Predmet predmet: polozeniPredmeti){
+				
+				predmeti += "| " + predmet.toString() + " | " + "\n";
+			}			
+		    SendMessage message = new SendMessage() 
+		                    .setChatId(update.getMessage().getChatId())
+		                    .setText("POLOZENI ISPITI: " + predmeti);
+		    message.setReplyMarkup(getKeyboardMenuOptions());    
+		    
+		    return message; 		
+			
+		}
+		else{
+			
+			 return sendMessageNonExistentNumber(update);				
+		}
+		
+	}
+	
+	// kod za pravljenje nove poruke kao sablon ??
+	public SendMessage sendMessagePrijavljeniIspiti(Update update, Long chatId){
+		
+		System.out.println(  "evo ga student, ulazim u prijaveljne ispite i  " + chatId);
+
+		if(chatId != null){
+			
+			ChatBotIdentitet chatBotIdentitet = getChatIdentitetService().findOneByChatId(chatId);
+			
+			System.out.println(chatBotIdentitet.getPhoneNumber() + "evo ga studentov broj" );
+			System.out.println(chatBotIdentitet.getFirstName() + "evo ga student, ulazim u prijavljene ispite ");
+			Student student = getStudentService().findOneByBrojTelefona(chatBotIdentitet.getPhoneNumber());
+			List<Prijava> prijavljeniIspiti = getPrijavaService().getPrijavljeniIspiti(student);
+			String prijave = "";
+		
+			for(Prijava p: prijavljeniIspiti){
+				
+				prijave += "| " + p.getIspit().toString() + " | " + "\n";
+			}			
+		    SendMessage message = new SendMessage() 
+		                    .setChatId(update.getMessage().getChatId())
+		                    .setText("PRIJAVLJENI ISPITI: " + prijave);
+		    message.setReplyMarkup(getKeyboardMenuOptions());    
+		    
+		    return message; 		
+			
+		}
+		else{
+			
+			 return sendMessageNonExistentNumber(update);				
+		}
+		
+	}
+	
+	
+
+	// kod za pravljenje nove poruke kao sablon 
+	public SendMessage sendMessageIspitiZaPrijavu(Update update, Long chatId){
+		
+		
+		System.out.println(  "evo ga student, ulazim u ispite za prijavu i  " + chatId);
+
+		if(chatId != null){
+			
+			ChatBotIdentitet chatBotIdentitet = getChatIdentitetService().findOneByChatId(chatId);
+			
+			System.out.println(chatBotIdentitet.getPhoneNumber() + "evo ga studentov broj" );
+			System.out.println(chatBotIdentitet.getFirstName() + "evo ga student, ulazim u ispite za prijavu ");
 			Student student = getStudentService().findOneByBrojTelefona(chatBotIdentitet.getPhoneNumber());
 			List<Ispit> ispitiZaPrijavu = getIspitService().ispitiZaPrijavu(student);
 			String ispiti = "";
@@ -190,14 +263,23 @@ public class BotCommandsService  {
 	}
 	
 	// kod za pravljenje nove poruke kao sablon 
-	public SendMessage sendMessageStanjeRacuna(Update update){
+	public SendMessage sendMessageStanjeRacuna(Update update, Long chatId){
 		
-	    SendMessage message = new SendMessage() 
-	                    .setChatId(update.getMessage().getChatId())
-	                    .setText(update.getMessage().getText());
-	    message.setReplyMarkup(getKeyboardMenuOptions());    
+		if(chatId != null){
+			
+			ChatBotIdentitet chatBotIdentitet = getChatIdentitetService().findOneByChatId(chatId);
+			Student student = getStudentService().findOneByBrojTelefona(chatBotIdentitet.getPhoneNumber());
+			
+		    SendMessage message = new SendMessage() 
+		                    .setChatId(update.getMessage().getChatId())
+		                    .setText("STANJE VASEG RACUNA JE: " + student.getStanje() + " RSD");
+		    message.setReplyMarkup(getKeyboardMenuOptions());    
+		    
+		    return message; 
 	    
-	    return message; 
+		}else{
+			 return sendMessageNonExistentNumber(update);		
+		}
 	}
 	
 	public SendMessage sendMessageStart(Update update){

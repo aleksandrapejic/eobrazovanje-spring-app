@@ -1,5 +1,6 @@
 package tseo.project.eobrazovanje.service.interfaces;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.data.domain.Page;
@@ -25,4 +26,6 @@ public interface PrijavaServiceInterface {
 	Set<Prijava> getPolozeniPredmeti(Student student);
 
 	Page<Prijava> getPrijavaByStudent(Student student, Pageable pageable);
+
+	List<Prijava> getPrijavljeniIspiti(Student student);
 }

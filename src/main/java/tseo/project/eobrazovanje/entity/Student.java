@@ -38,18 +38,19 @@ public class Student extends User {
 	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JsonIgnore
 	private Set<PredispitneObaveze> predispitneObaveze;
-
+	private String brojTelefona;
 	public Student() {
 
 	}
 
 	public Student(Long id, String brojIndexa, String tekuciRacun, Double stanje, String username, String password,
-			String ime, String prezime, String jmbg, String adresa, String brojtelefona) {
+			String ime, String prezime, String jmbg, String adresa, String brojTelefona) {
 		super( id,  username,password, ime, prezime, jmbg,adresa,
-				Role.STUDENT , brojtelefona);
+				Role.STUDENT);
 		this.brojIndexa = brojIndexa;
 		this.tekuciRacun = tekuciRacun;
 		this.stanje = stanje;
+		this.brojTelefona = brojTelefona;
 	}
 
 	public String getBrojIndexa() {
@@ -117,4 +118,13 @@ public class Student extends User {
 		this.stanje = stanje;
 	}
 
+	public String getBrojTelefona() {
+		return brojTelefona;
+	}
+
+	public void setBrojTelefona(String brojTelefona) {
+		this.brojTelefona = brojTelefona;
+	}
+
+	
 }

@@ -17,10 +17,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.telegram.telegrambots.meta.generics.BotSession;
 
 import tseo.project.eobrazovanje.dto.IspitDto;
 import tseo.project.eobrazovanje.entity.Ispit;
 import tseo.project.eobrazovanje.entity.Prijava;
+import tseo.project.eobrazovanje.notificationBot.BeanUtil;
+import tseo.project.eobrazovanje.notificationBot.BotCommandsService;
+import tseo.project.eobrazovanje.notificationBot.NotificationBot;
 import tseo.project.eobrazovanje.service.IspitService;
 import tseo.project.eobrazovanje.service.NastavnikService;
 import tseo.project.eobrazovanje.service.PredmetService;
@@ -73,12 +77,18 @@ public class IspitController {
 			Page<Prijava> prijave = prijavaService.getByIspit(ispit, pageable);
 			HttpHeaders headers = new HttpHeaders();
 			headers.set("total", String.valueOf(prijave.getTotalPages()));
-
+			
 			return ResponseEntity.ok().headers(headers).body(prijave.getContent());
 		} else {
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	
+	private NotificationBot getBot() {
+        return BeanUtil.getBot();
+    }
+		
 
 	@PostMapping
 	@PreAuthorize("hasAuthority('ADMINISTRATOR')")
@@ -87,7 +97,9 @@ public class IspitController {
 			return new ResponseEntity(errors.getAllErrors(), HttpStatus.BAD_REQUEST);
 		}
 		if (dto != null) {
+			
 			Ispit ispit = ispitService.save(dto);
+			
 			return new ResponseEntity(ispit, HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity(HttpStatus.BAD_REQUEST);

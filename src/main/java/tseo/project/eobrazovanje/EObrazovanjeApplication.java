@@ -25,15 +25,9 @@ public class EObrazovanjeApplication {
 		
 		SpringApplication.run(EObrazovanjeApplication.class, args);
 		
+		BeanUtil.makeABot();
 		
 		
-		TelegramBotsApi telegramBotsApi = new TelegramBotsApi();
-	        try {
-	            telegramBotsApi.registerBot(new NotificationBot());
-	            
-	        } catch (TelegramApiException e) {
-	           
-	        }
 	}
 	
 	   
