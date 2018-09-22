@@ -3,11 +3,14 @@ package tseo.project.eobrazovanje.entity;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -38,19 +41,36 @@ public class Student extends User {
 	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JsonIgnore
 	private Set<PredispitneObaveze> predispitneObaveze;
+	@Column(unique=true)
 	private String brojTelefona;
+	@OneToOne
+	private ChatBotIdentitet chatbotIdentitet;
+	
+
 	public Student() {
 
 	}
 
 	public Student(Long id, String brojIndexa, String tekuciRacun, Double stanje, String username, String password,
-			String ime, String prezime, String jmbg, String adresa, String brojTelefona) {
+			String ime, String prezime, String jmbg, String adresa, String brojTelefona, ChatBotIdentitet chatbotIdentitet) {
 		super( id,  username,password, ime, prezime, jmbg,adresa,
 				Role.STUDENT);
 		this.brojIndexa = brojIndexa;
 		this.tekuciRacun = tekuciRacun;
 		this.stanje = stanje;
 		this.brojTelefona = brojTelefona;
+		this.chatbotIdentitet = chatbotIdentitet;
+	}
+
+	
+	
+	
+	public ChatBotIdentitet getChatbotIdentitet() {
+		return chatbotIdentitet;
+	}
+
+	public void setChatbotIdentitet(ChatBotIdentitet chatbotIdentitet) {
+		this.chatbotIdentitet = chatbotIdentitet;
 	}
 
 	public String getBrojIndexa() {

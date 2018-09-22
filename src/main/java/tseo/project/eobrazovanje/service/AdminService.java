@@ -16,13 +16,13 @@ import tseo.project.eobrazovanje.service.interfaces.AdminServiceInterface;
 @Service
 public class AdminService implements AdminServiceInterface {
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
+	
 	@Autowired
 	AdminRepository adminRepository;
+	
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	
 
 	@Override
 	public List<Admin> findAll() {
@@ -60,7 +60,7 @@ public class AdminService implements AdminServiceInterface {
 		admin.setJmbg(adminDto.getJmbg());
 		admin.setPrezime(adminDto.getPrezime());
 		admin.setUsername(adminDto.getUsername());
-		admin.setPassword(passwordEncoder().encode(adminDto.getPassword()));
+		admin.setPassword(passwordEncoder.encode(adminDto.getPassword()));
 		return save(admin);
 	}
 
@@ -74,7 +74,7 @@ public class AdminService implements AdminServiceInterface {
 			admin.setJmbg(adminDto.getJmbg());
 			admin.setPrezime(adminDto.getPrezime());
 			admin.setUsername(adminDto.getUsername());
-			admin.setPassword(passwordEncoder().encode(adminDto.getPassword()));
+			admin.setPassword(passwordEncoder.encode(adminDto.getPassword()));
 			return admin;
 		}
 	}

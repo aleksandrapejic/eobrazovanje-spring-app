@@ -22,9 +22,9 @@ import tseo.project.eobrazovanje.entity.PredispitneObaveze;
 import tseo.project.eobrazovanje.entity.Student;
 import tseo.project.eobrazovanje.entity.User;
 import tseo.project.eobrazovanje.enumeration.Role;
-import tseo.project.eobrazovanje.notificationBot.BeanUtil;
 import tseo.project.eobrazovanje.repository.StudentRepository;
 import tseo.project.eobrazovanje.service.interfaces.StudentServiceInterface;
+import tseo.project.eobrazovanje.util.BeanUtil;
 
 @Service
 public class StudentService implements StudentServiceInterface {
@@ -145,12 +145,12 @@ public class StudentService implements StudentServiceInterface {
 	}
 
 	@Override
-	public void updateChatBotIdentitet(String stariBroj, Student student, boolean subscribedTelegram) {
+	public void updateChatBotIdentitet(Student student, boolean subscribedTelegram) {
 		
 		System.out.println("usao sam u update chat bot identiteta u student servisu");
-		ChatBotIdentitet chatBotIdentitet = BeanUtil.getChatIdentitetService().findOneByPhoneNumber(stariBroj);
+		ChatBotIdentitet chatBotIdentitet = BeanUtil.getChatIdentitetService().findOneByUser(student);
 		if(chatBotIdentitet != null){
-			BeanUtil.getChatIdentitetService().updateChatBotIdentitetBroj(chatBotIdentitet, student);
+
 			BeanUtil.getChatIdentitetService().updateChatBotIdentitetPretplata(chatBotIdentitet, subscribedTelegram);
 			
 		}
@@ -163,60 +163,41 @@ public class StudentService implements StudentServiceInterface {
 		}
 
 	@Override
-	public StudentDto findOutIfSubscribed(Long id) {
+	public StudentDto studentDtoMaker(Student student) {
 		
-		Student student = findOne(id);
-		ChatBotIdentitet identitet = BeanUtil.getChatIdentitetService().findOneByPhoneNumber(student.getBrojTelefona());
+		
+		ChatBotIdentitet identitet = BeanUtil.getChatIdentitetService().findOneByUser(student);
+		
+		if(student.getChatbotIdentitet() != null){
 
-		if(identitet != null){
-			StudentDto dto = new StudentDto();
-			dto.setId(student.getId());
-			dto.setAdresa(student.getAdresa());
-			dto.setIme(student.getIme());
-			dto.setPrezime(student.getPrezime());
-			dto.setBrojTelefona(student.getBrojTelefona());
-			dto.setSubscribedTelegram(identitet.isSubscribedTelegram());
-			dto.setJmbg(student.getJmbg());
-			dto.setUsername(student.getUsername());
-			dto.setBrojIndexa(student.getBrojIndexa());
-			dto.setRole(Role.STUDENT);
+			StudentDto dto = dtoBasic(student);
+			dto.setSubscribedTelegram(identitet.isSubscribedTelegram());		
+			dto.setChatId(identitet.getChatId());
+			
 			return dto;
 		}
 		else{
-			StudentDto dto = new StudentDto();
-			dto.setId(student.getId());
-			dto.setAdresa(student.getAdresa());
-			dto.setIme(student.getIme());
-			dto.setPrezime(student.getPrezime());
-			dto.setBrojTelefona(student.getBrojTelefona());
-			dto.setJmbg(student.getJmbg());
-			dto.setUsername(student.getUsername());
-			dto.setBrojIndexa(student.getBrojIndexa());
-			dto.setRole(Role.STUDENT);
-			return dto;
+			
+			return dtoBasic(student);
 		}
 	}
 		
 	
-	@Override
-	public StudentDto studentIzmenaBrojaIUpdateChatbota(Student updateStudent){
+	public StudentDto dtoBasic(Student student) {
 		
 		StudentDto dto = new StudentDto();
-		dto.setId(updateStudent.getId());
-		dto.setAdresa(updateStudent.getAdresa());
-		dto.setIme(updateStudent.getIme());
-		dto.setPrezime(updateStudent.getPrezime());
-		dto.setBrojTelefona(updateStudent.getBrojTelefona());
-		dto.setJmbg(updateStudent.getJmbg());
-		dto.setUsername(updateStudent.getUsername());
-		dto.setBrojIndexa(updateStudent.getBrojIndexa());
+		dto.setId(student.getId());
+		dto.setAdresa(student.getAdresa());
+		dto.setIme(student.getIme());
+		dto.setPrezime(student.getPrezime());
+		dto.setBrojTelefona(student.getBrojTelefona());
+		dto.setJmbg(student.getJmbg());
+		dto.setUsername(student.getUsername());
+		dto.setBrojIndexa(student.getBrojIndexa());
 		dto.setRole(Role.STUDENT);
-		System.out.println("STUDENT KONTROLER:prosao sam chatbotidentitet i sacuvao ");
-		
+		dto.setStanje(student.getStanje());
 		
 		return dto;
 	}
 	
-	
-
 }

@@ -36,12 +36,9 @@ public interface StudentServiceInterface {
 	Student findOneByBrojTelefona(String brojTelefona);
 
 
-	void updateChatBotIdentitet(String stariBroj, Student updateStudent, boolean subscribedTelegram);
+	StudentDto studentDtoMaker(Student student);
 
-
-	StudentDto findOutIfSubscribed(Long id);
-
-	StudentDto studentIzmenaBrojaIUpdateChatbota(Student updateStudent);
+	void updateChatBotIdentitet(Student student, boolean subscribedTelegram);
 
 
 }

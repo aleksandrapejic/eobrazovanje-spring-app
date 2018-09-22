@@ -1,4 +1,4 @@
-package tseo.project.eobrazovanje.notificationBot;
+package tseo.project.eobrazovanje.entity;
 
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -6,9 +6,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import tseo.project.eobrazovanje.entity.ChatBotIdentitet;
-import tseo.project.eobrazovanje.entity.Prijava;
-import tseo.project.eobrazovanje.entity.Student;
+import tseo.project.eobrazovanje.service.BotCommandsService;
+import tseo.project.eobrazovanje.util.BeanUtil;
 
 @Component
 public class NotificationBot extends TelegramLongPollingBot  {
@@ -140,10 +139,10 @@ public class NotificationBot extends TelegramLongPollingBot  {
 	
 
 	
-	public void posaljiObavestenje(Prijava prijava, String student){
+	public void posaljiObavestenje(Prijava prijava, Student student){
 		
 		int ocena = Math.round(prijava.getOsvojeniBodoviIspit()/10);
-		ChatBotIdentitet chatBotIdentitet = getBotCommandsService().getChatIdentitetService().findOneByPhoneNumber(student);
+		ChatBotIdentitet chatBotIdentitet = getBotCommandsService().getChatIdentitetService().findOneByUser(student);
 		if(chatBotIdentitet.isSubscribedTelegram()){			
 			
 			 SendMessage message = new SendMessage() 

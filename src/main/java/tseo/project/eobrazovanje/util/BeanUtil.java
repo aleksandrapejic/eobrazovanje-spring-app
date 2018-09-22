@@ -1,7 +1,6 @@
-package tseo.project.eobrazovanje.notificationBot;
+package tseo.project.eobrazovanje.util;
 
 import javax.annotation.PreDestroy;
-import javax.management.Notification;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -11,6 +10,7 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.BotSession;
 
+import tseo.project.eobrazovanje.entity.NotificationBot;
 import tseo.project.eobrazovanje.entity.PredispitneObaveze;
 import tseo.project.eobrazovanje.repository.ChatBotIdentitetRepository;
 import tseo.project.eobrazovanje.repository.IspitRepository;
@@ -18,6 +18,7 @@ import tseo.project.eobrazovanje.repository.PredispitneObavezeRepository;
 import tseo.project.eobrazovanje.repository.PredispitneObavezeSablonRepository;
 import tseo.project.eobrazovanje.repository.PrijavaRepository;
 import tseo.project.eobrazovanje.repository.StudentRepository;
+import tseo.project.eobrazovanje.service.BotCommandsService;
 import tseo.project.eobrazovanje.service.ChatBotIdentitetService;
 import tseo.project.eobrazovanje.service.IspitService;
 import tseo.project.eobrazovanje.service.PredispitneObavezeSablonService;

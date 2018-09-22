@@ -5,12 +5,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.telegram.telegrambots.ApiContextInitializer;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import tseo.project.eobrazovanje.notificationBot.BeanUtil;
-import tseo.project.eobrazovanje.notificationBot.NotificationBot;
-import tseo.project.eobrazovanje.service.StudentService;
+import tseo.project.eobrazovanje.util.BeanUtil;
 
 @SpringBootApplication
 @EnableAutoConfiguration

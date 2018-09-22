@@ -33,7 +33,6 @@ import tseo.project.eobrazovanje.entity.Prijava;
 import tseo.project.eobrazovanje.entity.Student;
 import tseo.project.eobrazovanje.entity.Uplata;
 import tseo.project.eobrazovanje.enumeration.Role;
-import tseo.project.eobrazovanje.notificationBot.BeanUtil;
 import tseo.project.eobrazovanje.service.ChatBotIdentitetService;
 import tseo.project.eobrazovanje.service.DokumentService;
 import tseo.project.eobrazovanje.service.interfaces.IspitServiceInterface;
@@ -41,6 +40,7 @@ import tseo.project.eobrazovanje.service.interfaces.PredmetServiceInterface;
 import tseo.project.eobrazovanje.service.interfaces.PrijavaServiceInterface;
 import tseo.project.eobrazovanje.service.interfaces.StudentServiceInterface;
 import tseo.project.eobrazovanje.service.interfaces.UplataServiceInterface;
+import tseo.project.eobrazovanje.util.BeanUtil;
 
 @RestController
 @RequestMapping("/api/studenti")
@@ -249,29 +249,64 @@ public class StudentController {
 	
 	@PutMapping("/{id}/broj-telefona")
 	@PreAuthorize("hasAuthority('STUDENT')")
-	public ResponseEntity changePhoneNumber(@PathVariable("id") long id, @Validated @RequestBody StudentDto student,
+	public ResponseEntity changePhoneNumber(@PathVariable("id") long id, @Validated @RequestBody StudentDto studentdto,
 			Errors errors) {
 		if (errors.hasErrors()) {
 			return new ResponseEntity(errors.getAllErrors(), HttpStatus.BAD_REQUEST);
 		}
-		if (student.getId() != id) {
+		if (studentdto.getId() != id) {
 			return new ResponseEntity(HttpStatus.BAD_REQUEST);
 		} else {
 			String trenutniBroj = studentService.findOne(id).getBrojTelefona();
-			Student updateStudent = studentService.update(student);
+			Student updateStudent = studentService.update(studentdto);
 			System.out.println("Student kontroler: " + trenutniBroj + "novi broj je " + updateStudent.getBrojTelefona() );
-			
-			ChatBotIdentitet chatBotIdentitet = BeanUtil.getChatIdentitetService().findOneByPhoneNumber(trenutniBroj);
+			ChatBotIdentitet chatBotIdentitet = BeanUtil.getChatIdentitetService().findOneByUser(updateStudent);
 			if(chatBotIdentitet != null){
-				studentService.updateChatBotIdentitet(trenutniBroj, updateStudent, student.isSubscribedTelegram());
-				StudentDto dto = studentService.studentIzmenaBrojaIUpdateChatbota(updateStudent);
-				dto.setSubscribedTelegram(chatBotIdentitet.isSubscribedTelegram());
+				BeanUtil.getChatIdentitetService().delete(chatBotIdentitet.getId());
+				StudentDto dto = studentService.studentDtoMaker(updateStudent);
+				//dto.setSubscribedTelegram(chatBotIdentitet.isSubscribedTelegram());
+				//dto.setChatId(chatBotIdentitet.getChatId());
+				System.out.println("chatbotidentitet nije null");
 				return new ResponseEntity(dto, HttpStatus.OK);
+				
 			}
 			else{
+				System.out.println("chatbotidentitet jeste null");
+				StudentDto dto = studentService.studentDtoMaker(updateStudent);
 				
-				StudentDto dto = studentService.studentIzmenaBrojaIUpdateChatbota(updateStudent);
 				return new ResponseEntity(dto, HttpStatus.OK);
+			}
+		
+			
+		}
+	}
+	
+	
+	
+	@PutMapping("/{id}/telegram-prijava")
+	@PreAuthorize("hasAuthority('STUDENT')")
+	public ResponseEntity changeSubscriptionTelegram(@PathVariable("id") long id, @Validated @RequestBody StudentDto studentdto,
+			Errors errors) {
+		if (errors.hasErrors()) {
+			return new ResponseEntity(errors.getAllErrors(), HttpStatus.BAD_REQUEST);
+		}
+		if (studentdto.getId() != id) {
+			return new ResponseEntity(HttpStatus.BAD_REQUEST);
+		} else {
+	
+			System.out.println("Student kontroler: menjam prijavu studenta na bota" );
+			Student student = studentService.findOne(studentdto.getId());
+			ChatBotIdentitet chatBotIdentitet = BeanUtil.getChatIdentitetService().findOneByUser(student);
+			if(chatBotIdentitet != null){
+				BeanUtil.getChatIdentitetService().updateChatBotIdentitetPretplata(chatBotIdentitet, studentdto.isSubscribedTelegram());
+				System.out.println("chatbotidentitet nije null i izmenjena je prijava na bota" + chatBotIdentitet.isSubscribedTelegram());
+				return new ResponseEntity(student, HttpStatus.OK);
+				
+			}
+			else{
+				System.out.println("chatbotidentitet jeste null");
+			
+				return new ResponseEntity(HttpStatus.BAD_REQUEST);
 			}
 		
 			

@@ -148,8 +148,10 @@ public class UserController {
 		if (user != null) {
 			if(user.getRole().equals(Role.STUDENT)){
 				System.out.println("UserController : usao sam u rolu student");
-				StudentDto student = studentService.findOutIfSubscribed(user.getId());
-				return ResponseEntity.ok(student);
+				Student student = studentService.findOne(user.getId());
+				StudentDto studentdto = studentService.studentDtoMaker(student);
+				
+				return ResponseEntity.ok(studentdto);
 			}else{
 				System.out.println("UserController: user nije student");
 				return ResponseEntity.ok(user);

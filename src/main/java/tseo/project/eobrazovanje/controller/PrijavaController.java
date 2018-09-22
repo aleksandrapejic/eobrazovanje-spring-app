@@ -19,14 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import tseo.project.eobrazovanje.dto.PrijavaDto;
+import tseo.project.eobrazovanje.entity.NotificationBot;
 import tseo.project.eobrazovanje.entity.Prijava;
 import tseo.project.eobrazovanje.entity.Student;
-import tseo.project.eobrazovanje.notificationBot.BeanUtil;
-import tseo.project.eobrazovanje.notificationBot.NotificationBot;
 import tseo.project.eobrazovanje.service.interfaces.IspitServiceInterface;
 import tseo.project.eobrazovanje.service.interfaces.NastavnikServiceInterface;
 import tseo.project.eobrazovanje.service.interfaces.PrijavaServiceInterface;
 import tseo.project.eobrazovanje.service.interfaces.StudentServiceInterface;
+import tseo.project.eobrazovanje.util.BeanUtil;
 
 @RestController
 @RequestMapping("/api/prijave")
@@ -108,7 +108,7 @@ public class PrijavaController {
 					System.out.println("dosao sam do slanja notif o oceni");
 					Student student = studentService.findOne(dto.getStudent());
 					
-					getBot().posaljiObavestenje(prijava, student.getBrojTelefona() );
+					getBot().posaljiObavestenje(prijava, student );
 				}
 				return new ResponseEntity(prijava, HttpStatus.CREATED);
 			}

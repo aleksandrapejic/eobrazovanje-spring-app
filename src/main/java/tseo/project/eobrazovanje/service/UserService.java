@@ -17,9 +17,9 @@ import tseo.project.eobrazovanje.dto.PasswordDto;
 import tseo.project.eobrazovanje.dto.StudentDto;
 import tseo.project.eobrazovanje.entity.ChatBotIdentitet;
 import tseo.project.eobrazovanje.entity.User;
-import tseo.project.eobrazovanje.notificationBot.BeanUtil;
 import tseo.project.eobrazovanje.repository.UserRepository;
 import tseo.project.eobrazovanje.service.interfaces.UserServiceInterface;
+import tseo.project.eobrazovanje.util.BeanUtil;
 
 @Service
 public class UserService implements UserServiceInterface, UserDetailsService {

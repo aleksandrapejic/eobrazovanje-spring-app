@@ -1,4 +1,4 @@
-package tseo.project.eobrazovanje.notificationBot;
+package tseo.project.eobrazovanje.service;
 
 import java.util.ArrayList;
 
@@ -19,11 +19,7 @@ import tseo.project.eobrazovanje.entity.Ispit;
 import tseo.project.eobrazovanje.entity.Predmet;
 import tseo.project.eobrazovanje.entity.Prijava;
 import tseo.project.eobrazovanje.entity.Student;
-import tseo.project.eobrazovanje.service.ChatBotIdentitetService;
-import tseo.project.eobrazovanje.service.IspitService;
-import tseo.project.eobrazovanje.service.PredmetService;
-import tseo.project.eobrazovanje.service.PrijavaService;
-import tseo.project.eobrazovanje.service.StudentService;
+import tseo.project.eobrazovanje.util.BeanUtil;
 
 @Service
 public class BotCommandsService  {
@@ -41,20 +37,20 @@ public class BotCommandsService  {
         return BeanUtil.getStudentService();
     }
 	
-	private PrijavaService getPrijavaService() {
+	public PrijavaService getPrijavaService() {
         return BeanUtil.getPrijavaService();
     }
 	
-	private IspitService getIspitService() {
+	public IspitService getIspitService() {
         return BeanUtil.getIspitService();
     }
 	
-	private PredmetService getPredmetService() {
+	public PredmetService getPredmetService() {
         return BeanUtil.getPredmetService();
     }
 	
 	
-	ChatBotIdentitetService getChatIdentitetService() {
+	public ChatBotIdentitetService getChatIdentitetService() {
         return BeanUtil.getChatIdentitetService();
     }
 	
@@ -107,8 +103,8 @@ public class BotCommandsService  {
 	}
 	
 	
-	public ChatBotIdentitet saveChatIdentitet(Update update, Contact contact){
-		return getChatIdentitetService().save(update, contact);
+	public ChatBotIdentitet saveChatIdentitet(Update update, Student student){
+		return getChatIdentitetService().save(update, student);
 	}
 	
 
@@ -123,9 +119,8 @@ public class BotCommandsService  {
 		 
 		 
 		  if(student != null){
-			  if(getChatIdentitetService().findOneByPhoneNumber(student.getBrojTelefona()) != null){
-				  	//saveChatIdentitet(update, contact);
-				  	//ChatBotIdentitet chatIdentitet = 
+			  if(getChatIdentitetService().findOneByUser(student) != null){
+			
 					Long chatId = update.getMessage().getChatId();                             
 				    String firstName = update.getMessage().getContact().getFirstName();		 
 				    SendMessage message = new SendMessage() // Create a message object object
@@ -135,12 +130,13 @@ public class BotCommandsService  {
 				    return message;			  
 			  }
 			  else{
-				  saveChatIdentitet(update, contact);
+				  ChatBotIdentitet chatBotIdentitet = saveChatIdentitet(update, student);
+				  student.setChatbotIdentitet(chatBotIdentitet);
+				  BeanUtil.getStudentService().save(student);
 				  Long chatId = update.getMessage().getChatId(); 
-				  ChatBotIdentitet chatBotIdentitet = getChatIdentitetService().findOneByPhoneNumber(contact.getPhoneNumber());
 				  System.out.println(chatBotIdentitet );
 				    String firstName = update.getMessage().getContact().getFirstName();		 
-				    SendMessage message = new SendMessage() // Create a message object object
+				    SendMessage message = new SendMessage() 
 		                       .setChatId(chatId)
 				               .setText("Dobrodosao/la na chat bot E-Obrazovanja " + firstName +  ", ovo je tvoj meni.");			  
 				    message.setReplyMarkup(getKeyboardMenuOptions());  
@@ -158,14 +154,13 @@ public class BotCommandsService  {
 	public SendMessage sendMessagePolozeniIspiti(Update update, Long chatId){
 		
 		System.out.println(  "evo ga student, ulazim u polozene ispite i  " + chatId);
-
-		if(chatId != null){
+		ChatBotIdentitet chatBotIdentitet = getChatIdentitetService().findOneByChatId(chatId);
+		
+		if(chatBotIdentitet != null){
+			System.out.println(  "evo ga student, ulazim u polozene ispite i  " + chatBotIdentitet.getFirstName());
 			
-			ChatBotIdentitet chatBotIdentitet = getChatIdentitetService().findOneByChatId(chatId);
-			
-			System.out.println(chatBotIdentitet.getPhoneNumber() + "evo ga studentov broj" );
 			System.out.println(chatBotIdentitet.getFirstName() + "evo ga student, ulazim u polozene ispite ");
-			Student student = getStudentService().findOneByBrojTelefona(chatBotIdentitet.getPhoneNumber());
+			Student student = getStudentService().findOne((chatBotIdentitet.getUser().getId()));
 			Set<Predmet> polozeniPredmeti = getPredmetService().getPolozeniPredmeti(student);
 			String predmeti = "";
 		
@@ -182,7 +177,7 @@ public class BotCommandsService  {
 			
 		}
 		else{
-			
+			System.out.println("nema identitet, botcommand polozeni ispiti");
 			 return sendMessageNonExistentNumber(update);				
 		}
 		
@@ -192,14 +187,13 @@ public class BotCommandsService  {
 	public SendMessage sendMessagePrijavljeniIspiti(Update update, Long chatId){
 		
 		System.out.println(  "evo ga student, ulazim u prijaveljne ispite i  " + chatId);
-
-		if(chatId != null){
+		ChatBotIdentitet chatBotIdentitet = getChatIdentitetService().findOneByChatId(chatId);
+		
+		if(chatBotIdentitet != null){
 			
-			ChatBotIdentitet chatBotIdentitet = getChatIdentitetService().findOneByChatId(chatId);
 			
-			System.out.println(chatBotIdentitet.getPhoneNumber() + "evo ga studentov broj" );
-			System.out.println(chatBotIdentitet.getFirstName() + "evo ga student, ulazim u prijavljene ispite ");
-			Student student = getStudentService().findOneByBrojTelefona(chatBotIdentitet.getPhoneNumber());
+			System.out.println(chatBotIdentitet.getFirstName() + "BotCommand: sendMessagePrijavljeniIspiti metoda, pronašao sam chatidentitet studenta");
+			Student student = getStudentService().findOne((chatBotIdentitet.getUser().getId()));
 			List<Prijava> prijavljeniIspiti = getPrijavaService().getPrijavljeniIspiti(student);
 			String prijave = "";
 		
@@ -229,14 +223,13 @@ public class BotCommandsService  {
 		
 		
 		System.out.println(  "evo ga student, ulazim u ispite za prijavu i  " + chatId);
-
-		if(chatId != null){
+		ChatBotIdentitet chatBotIdentitet = getChatIdentitetService().findOneByChatId(chatId);
+		
+		if(chatBotIdentitet != null){
 			
-			ChatBotIdentitet chatBotIdentitet = getChatIdentitetService().findOneByChatId(chatId);
-			
-			System.out.println(chatBotIdentitet.getPhoneNumber() + "evo ga studentov broj" );
-			System.out.println(chatBotIdentitet.getFirstName() + "evo ga student, ulazim u ispite za prijavu ");
-			Student student = getStudentService().findOneByBrojTelefona(chatBotIdentitet.getPhoneNumber());
+		
+			System.out.println(chatBotIdentitet.getFirstName() + "BotCommand: sendMessageIspitiZaPrijavu metoda, pronašao sam chatidentitet studenta");
+			Student student = getStudentService().findOne((chatBotIdentitet.getUser().getId()));
 			List<Ispit> ispitiZaPrijavu = getIspitService().ispitiZaPrijavu(student);
 			String ispiti = "";
 		
@@ -264,11 +257,11 @@ public class BotCommandsService  {
 	
 	// kod za pravljenje nove poruke kao sablon 
 	public SendMessage sendMessageStanjeRacuna(Update update, Long chatId){
-		
-		if(chatId != null){
+		ChatBotIdentitet chatBotIdentitet = getChatIdentitetService().findOneByChatId(chatId);
+		if(chatBotIdentitet != null){
 			
-			ChatBotIdentitet chatBotIdentitet = getChatIdentitetService().findOneByChatId(chatId);
-			Student student = getStudentService().findOneByBrojTelefona(chatBotIdentitet.getPhoneNumber());
+			
+			Student student = getStudentService().findOne((chatBotIdentitet.getUser().getId()));
 			
 		    SendMessage message = new SendMessage() 
 		                    .setChatId(update.getMessage().getChatId())

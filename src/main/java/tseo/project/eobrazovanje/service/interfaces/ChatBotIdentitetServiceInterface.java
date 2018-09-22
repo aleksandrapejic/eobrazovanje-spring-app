@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Contact;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import tseo.project.eobrazovanje.entity.ChatBotIdentitet;
+import tseo.project.eobrazovanje.entity.Student;
 
 public interface ChatBotIdentitetServiceInterface {
 	
@@ -13,13 +14,13 @@ public interface ChatBotIdentitetServiceInterface {
 
 	ChatBotIdentitet findOne(Long id);
 
-	ChatBotIdentitet save(Update update, Contact contact);
-
 	Boolean delete(Long id);
 
-	ChatBotIdentitet findOneByPhoneNumber(String broj);
-
 	ChatBotIdentitet findOneByChatId(Long chatId);
+
+	ChatBotIdentitet updateChatBotIdentitetPretplata(ChatBotIdentitet chatIdentitet, boolean subscribedTelegram);
+
+	ChatBotIdentitet save(Update update, Student student);
 
 	
 }

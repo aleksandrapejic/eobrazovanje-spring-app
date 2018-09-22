@@ -15,13 +15,15 @@ public class StudentDto {
 	private String brojTelefona;
 	private boolean subscribedTelegram;
 	private Role role;
+	private long chatId;
+	private double stanje;
 
 	public StudentDto() {
 
 	}
 
 	public StudentDto(String username, String password, String ime, String prezime, String jmbg, String brojIndexa,
-			String adresa, String brojTelefona, boolean subscribedTelegram, Role role) {
+			String adresa, String brojTelefona, boolean subscribedTelegram, Role role, long chatId, double stanje) {
 		super();
 		this.ime = ime;
 		this.prezime = prezime;
@@ -33,10 +35,29 @@ public class StudentDto {
 		this.brojTelefona = brojTelefona;
 		this.subscribedTelegram = subscribedTelegram;
 		this.role = role;
+		this.chatId = chatId;
+		this.stanje = stanje;
+		
 	}
 
 	
 	
+	public double getStanje() {
+		return stanje;
+	}
+
+	public void setStanje(double stanje) {
+		this.stanje = stanje;
+	}
+
+	public long getChatId() {
+		return chatId;
+	}
+
+	public void setChatId(long chatId) {
+		this.chatId = chatId;
+	}
+
 	public Role getRole() {
 		return role;
 	}

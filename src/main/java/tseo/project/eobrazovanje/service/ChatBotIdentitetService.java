@@ -12,6 +12,7 @@ import tseo.project.eobrazovanje.entity.ChatBotIdentitet;
 import tseo.project.eobrazovanje.entity.Student;
 import tseo.project.eobrazovanje.repository.ChatBotIdentitetRepository;
 import tseo.project.eobrazovanje.service.interfaces.ChatBotIdentitetServiceInterface;
+import tseo.project.eobrazovanje.util.BeanUtil;
 
 @Service
 public class ChatBotIdentitetService implements ChatBotIdentitetServiceInterface {
@@ -33,15 +34,14 @@ public class ChatBotIdentitetService implements ChatBotIdentitetServiceInterface
 	}
 
 	@Override
-	public ChatBotIdentitet save(Update update, Contact contact) {
+	public ChatBotIdentitet save(Update update, Student student) {
+		
 		
 		ChatBotIdentitet chatIdentitet = new ChatBotIdentitet();
 		
 		chatIdentitet.setChatId(update.getMessage().getChatId());
-		chatIdentitet.setUserId(contact.getUserID());
-		chatIdentitet.setFirstName(contact.getFirstName());
-		chatIdentitet.setLastName(contact.getLastName());
-		chatIdentitet.setPhoneNumber(contact.getPhoneNumber());
+		chatIdentitet.setUserId(student);
+
 		
 		return repo.save(chatIdentitet);
 	}
@@ -55,26 +55,11 @@ public class ChatBotIdentitetService implements ChatBotIdentitetServiceInterface
 
 
 	@Override
-	public ChatBotIdentitet findOneByPhoneNumber(String broj) {
-		
-		return repo.findByPhoneNumber(broj);
-	}
-	
-	
-	@Override
 	public ChatBotIdentitet findOneByChatId(Long chatId) {
 		return repo.findOneByChatId(chatId);
 	}
 	
-
-	public ChatBotIdentitet updateChatBotIdentitetBroj(ChatBotIdentitet chatIdentitet, Student student) {
-
-		 System.out.println("cuvam novi broj upravo u chatbotidentitet");
-		chatIdentitet.setPhoneNumber(student.getBrojTelefona());
-		 System.out.println("broj: " + student.getBrojTelefona());
-		return repo.save(chatIdentitet);
-	}
-
+	@Override
 	public ChatBotIdentitet updateChatBotIdentitetPretplata(ChatBotIdentitet chatIdentitet, boolean subscribedTelegram) {
 
 		 System.out.println("cuvam pretplacenost upravo u chatbotidentitet");
@@ -82,5 +67,11 @@ public class ChatBotIdentitetService implements ChatBotIdentitetServiceInterface
 		
 		return repo.save(chatIdentitet);
 	}
+
+	public ChatBotIdentitet findOneByUser(Student student) {
+		 return repo.findOneByUser(student);
+	}
+
+
 
 }

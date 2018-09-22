@@ -16,10 +16,8 @@ import tseo.project.eobrazovanje.service.interfaces.NastavnikServiceInterface;
 @Service
 public class NastavnikService implements NastavnikServiceInterface {
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+	@Autowired
+	BCryptPasswordEncoder passwordEncoder;
 
 	@Autowired
 	NastavnikRepository nastavnikRepository;
@@ -60,7 +58,7 @@ public class NastavnikService implements NastavnikServiceInterface {
 		nastavnik.setJmbg(dto.getJmbg());
 		nastavnik.setPrezime(dto.getPrezime());
 		nastavnik.setUsername(dto.getUsername());
-		nastavnik.setPassword(passwordEncoder().encode(dto.getPassword()));
+		nastavnik.setPassword(passwordEncoder.encode(dto.getPassword()));
 		return save(nastavnik);
 	}
 

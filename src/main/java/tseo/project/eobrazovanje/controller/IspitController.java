@@ -21,15 +21,15 @@ import org.telegram.telegrambots.meta.generics.BotSession;
 
 import tseo.project.eobrazovanje.dto.IspitDto;
 import tseo.project.eobrazovanje.entity.Ispit;
+import tseo.project.eobrazovanje.entity.NotificationBot;
 import tseo.project.eobrazovanje.entity.Prijava;
-import tseo.project.eobrazovanje.notificationBot.BeanUtil;
-import tseo.project.eobrazovanje.notificationBot.BotCommandsService;
-import tseo.project.eobrazovanje.notificationBot.NotificationBot;
+import tseo.project.eobrazovanje.service.BotCommandsService;
 import tseo.project.eobrazovanje.service.IspitService;
 import tseo.project.eobrazovanje.service.NastavnikService;
 import tseo.project.eobrazovanje.service.PredmetService;
 import tseo.project.eobrazovanje.service.PrijavaService;
 import tseo.project.eobrazovanje.service.StudentService;
+import tseo.project.eobrazovanje.util.BeanUtil;
 
 @RestController
 @RequestMapping("/api/ispit")
