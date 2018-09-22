@@ -22,10 +22,10 @@ import tseo.project.eobrazovanje.dto.PrijavaDto;
 import tseo.project.eobrazovanje.entity.NotificationBot;
 import tseo.project.eobrazovanje.entity.Prijava;
 import tseo.project.eobrazovanje.entity.Student;
-import tseo.project.eobrazovanje.service.interfaces.IspitServiceInterface;
-import tseo.project.eobrazovanje.service.interfaces.NastavnikServiceInterface;
-import tseo.project.eobrazovanje.service.interfaces.PrijavaServiceInterface;
-import tseo.project.eobrazovanje.service.interfaces.StudentServiceInterface;
+import tseo.project.eobrazovanje.service.IspitServiceInterface;
+import tseo.project.eobrazovanje.service.NastavnikServiceInterface;
+import tseo.project.eobrazovanje.service.PrijavaServiceInterface;
+import tseo.project.eobrazovanje.service.StudentServiceInterface;
 import tseo.project.eobrazovanje.util.BeanUtil;
 
 @RestController

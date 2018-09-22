@@ -1,4 +1,4 @@
-package tseo.project.eobrazovanje.service;
+package tseo.project.eobrazovanje.service.impl;
 
 import java.util.Date;
 import java.util.List;
@@ -16,7 +16,7 @@ import tseo.project.eobrazovanje.entity.PredispitneObaveze;
 import tseo.project.eobrazovanje.entity.Prijava;
 import tseo.project.eobrazovanje.entity.Student;
 import tseo.project.eobrazovanje.repository.PrijavaRepository;
-import tseo.project.eobrazovanje.service.interfaces.PrijavaServiceInterface;
+import tseo.project.eobrazovanje.service.PrijavaServiceInterface;
 
 @Service
 public class PrijavaService implements PrijavaServiceInterface {

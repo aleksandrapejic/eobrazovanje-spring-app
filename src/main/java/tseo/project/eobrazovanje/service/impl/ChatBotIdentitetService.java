@@ -1,4 +1,4 @@
-package tseo.project.eobrazovanje.service;
+package tseo.project.eobrazovanje.service.impl;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import tseo.project.eobrazovanje.entity.ChatBotIdentitet;
 import tseo.project.eobrazovanje.entity.Student;
 import tseo.project.eobrazovanje.repository.ChatBotIdentitetRepository;
-import tseo.project.eobrazovanje.service.interfaces.ChatBotIdentitetServiceInterface;
+import tseo.project.eobrazovanje.service.ChatBotIdentitetServiceInterface;
 import tseo.project.eobrazovanje.util.BeanUtil;
 
 @Service

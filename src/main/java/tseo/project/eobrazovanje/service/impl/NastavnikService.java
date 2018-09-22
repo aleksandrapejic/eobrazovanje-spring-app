@@ -1,4 +1,4 @@
-package tseo.project.eobrazovanje.service;
+package tseo.project.eobrazovanje.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import tseo.project.eobrazovanje.dto.NastavnikDto;
 import tseo.project.eobrazovanje.entity.Nastavnik;
 import tseo.project.eobrazovanje.repository.NastavnikRepository;
-import tseo.project.eobrazovanje.service.interfaces.NastavnikServiceInterface;
+import tseo.project.eobrazovanje.service.NastavnikServiceInterface;
 
 @Service
 public class NastavnikService implements NastavnikServiceInterface {

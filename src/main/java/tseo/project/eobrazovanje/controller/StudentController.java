@@ -33,13 +33,13 @@ import tseo.project.eobrazovanje.entity.Prijava;
 import tseo.project.eobrazovanje.entity.Student;
 import tseo.project.eobrazovanje.entity.Uplata;
 import tseo.project.eobrazovanje.enumeration.Role;
-import tseo.project.eobrazovanje.service.ChatBotIdentitetService;
-import tseo.project.eobrazovanje.service.DokumentService;
-import tseo.project.eobrazovanje.service.interfaces.IspitServiceInterface;
-import tseo.project.eobrazovanje.service.interfaces.PredmetServiceInterface;
-import tseo.project.eobrazovanje.service.interfaces.PrijavaServiceInterface;
-import tseo.project.eobrazovanje.service.interfaces.StudentServiceInterface;
-import tseo.project.eobrazovanje.service.interfaces.UplataServiceInterface;
+import tseo.project.eobrazovanje.service.IspitServiceInterface;
+import tseo.project.eobrazovanje.service.PredmetServiceInterface;
+import tseo.project.eobrazovanje.service.PrijavaServiceInterface;
+import tseo.project.eobrazovanje.service.StudentServiceInterface;
+import tseo.project.eobrazovanje.service.UplataServiceInterface;
+import tseo.project.eobrazovanje.service.impl.ChatBotIdentitetService;
+import tseo.project.eobrazovanje.service.impl.DokumentService;
 import tseo.project.eobrazovanje.util.BeanUtil;
 
 @RestController

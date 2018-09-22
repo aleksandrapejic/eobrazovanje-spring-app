@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tseo.project.eobrazovanje.dto.AdminDto;
 import tseo.project.eobrazovanje.entity.Admin;
-import tseo.project.eobrazovanje.service.AdminService;
+import tseo.project.eobrazovanje.service.impl.AdminService;
 
 @RestController
 @RequestMapping("/api/admin")

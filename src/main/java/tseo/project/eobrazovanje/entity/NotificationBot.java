@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import tseo.project.eobrazovanje.service.BotCommandsService;
+import tseo.project.eobrazovanje.service.impl.BotCommandsService;
 import tseo.project.eobrazovanje.util.BeanUtil;
 
 @Component

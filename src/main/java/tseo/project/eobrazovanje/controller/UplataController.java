@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tseo.project.eobrazovanje.dto.UplataDto;
 import tseo.project.eobrazovanje.entity.Uplata;
-import tseo.project.eobrazovanje.service.interfaces.StudentServiceInterface;
-import tseo.project.eobrazovanje.service.interfaces.UplataServiceInterface;
+import tseo.project.eobrazovanje.service.StudentServiceInterface;
+import tseo.project.eobrazovanje.service.UplataServiceInterface;
 
 @RestController
 @RequestMapping("/api/uplate")

@@ -1,4 +1,4 @@
-package tseo.project.eobrazovanje.service.interfaces;
+package tseo.project.eobrazovanje.service;
 
 import java.util.List;
 import java.util.Set;

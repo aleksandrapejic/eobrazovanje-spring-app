@@ -1,4 +1,4 @@
-package tseo.project.eobrazovanje.service;
+package tseo.project.eobrazovanje.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ import tseo.project.eobrazovanje.dto.StudentDto;
 import tseo.project.eobrazovanje.entity.ChatBotIdentitet;
 import tseo.project.eobrazovanje.entity.User;
 import tseo.project.eobrazovanje.repository.UserRepository;
-import tseo.project.eobrazovanje.service.interfaces.UserServiceInterface;
+import tseo.project.eobrazovanje.service.UserServiceInterface;
 import tseo.project.eobrazovanje.util.BeanUtil;
 
 @Service

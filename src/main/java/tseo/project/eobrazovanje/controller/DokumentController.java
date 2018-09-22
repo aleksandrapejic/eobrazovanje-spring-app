@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tseo.project.eobrazovanje.dto.DokumentDto;
 import tseo.project.eobrazovanje.entity.Dokument;
-import tseo.project.eobrazovanje.service.DokumentService;
-import tseo.project.eobrazovanje.service.StudentService;
+import tseo.project.eobrazovanje.service.impl.DokumentService;
+import tseo.project.eobrazovanje.service.impl.StudentService;
 
 @RestController
 @RequestMapping("/api/dokument")

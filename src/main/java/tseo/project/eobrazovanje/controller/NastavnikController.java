@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tseo.project.eobrazovanje.dto.NastavnikDto;
 import tseo.project.eobrazovanje.entity.Nastavnik;
-import tseo.project.eobrazovanje.service.NastavnikService;
+import tseo.project.eobrazovanje.service.impl.NastavnikService;
 
 @RestController
 @RequestMapping("/api/nastavnik")

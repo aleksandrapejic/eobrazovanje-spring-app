@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tseo.project.eobrazovanje.dto.PredispitneObavezeSablonDto;
 import tseo.project.eobrazovanje.entity.PredispitneObavezeSablon;
-import tseo.project.eobrazovanje.service.NastavnikService;
-import tseo.project.eobrazovanje.service.PredispitneObavezeSablonService;
-import tseo.project.eobrazovanje.service.PredmetService;
+import tseo.project.eobrazovanje.service.impl.NastavnikService;
+import tseo.project.eobrazovanje.service.impl.PredispitneObavezeSablonService;
+import tseo.project.eobrazovanje.service.impl.PredmetService;
 
 @RestController
 @RequestMapping("/api/predispitne-obaveze/sabloni")

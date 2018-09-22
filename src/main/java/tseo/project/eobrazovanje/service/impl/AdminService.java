@@ -1,4 +1,4 @@
-package tseo.project.eobrazovanje.service;
+package tseo.project.eobrazovanje.service.impl;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import tseo.project.eobrazovanje.dto.AdminDto;
 import tseo.project.eobrazovanje.entity.Admin;
 import tseo.project.eobrazovanje.repository.AdminRepository;
-import tseo.project.eobrazovanje.service.interfaces.AdminServiceInterface;
+import tseo.project.eobrazovanje.service.AdminServiceInterface;
 
 @Service
 public class AdminService implements AdminServiceInterface {

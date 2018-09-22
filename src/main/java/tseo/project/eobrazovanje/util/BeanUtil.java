@@ -18,13 +18,13 @@ import tseo.project.eobrazovanje.repository.PredispitneObavezeRepository;
 import tseo.project.eobrazovanje.repository.PredispitneObavezeSablonRepository;
 import tseo.project.eobrazovanje.repository.PrijavaRepository;
 import tseo.project.eobrazovanje.repository.StudentRepository;
-import tseo.project.eobrazovanje.service.BotCommandsService;
-import tseo.project.eobrazovanje.service.ChatBotIdentitetService;
-import tseo.project.eobrazovanje.service.IspitService;
-import tseo.project.eobrazovanje.service.PredispitneObavezeSablonService;
-import tseo.project.eobrazovanje.service.PredmetService;
-import tseo.project.eobrazovanje.service.PrijavaService;
-import tseo.project.eobrazovanje.service.StudentService;
+import tseo.project.eobrazovanje.service.impl.BotCommandsService;
+import tseo.project.eobrazovanje.service.impl.ChatBotIdentitetService;
+import tseo.project.eobrazovanje.service.impl.IspitService;
+import tseo.project.eobrazovanje.service.impl.PredispitneObavezeSablonService;
+import tseo.project.eobrazovanje.service.impl.PredmetService;
+import tseo.project.eobrazovanje.service.impl.PrijavaService;
+import tseo.project.eobrazovanje.service.impl.StudentService;
 
 @Component
 public class BeanUtil implements ApplicationContextAware {

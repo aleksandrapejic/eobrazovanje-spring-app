@@ -28,10 +28,10 @@ import tseo.project.eobrazovanje.entity.Admin;
 import tseo.project.eobrazovanje.entity.ChatBotIdentitet;
 import tseo.project.eobrazovanje.entity.Student;
 import tseo.project.eobrazovanje.entity.User;
-import tseo.project.eobrazovanje.service.ChatBotIdentitetService;
-import tseo.project.eobrazovanje.service.StudentService;
-import tseo.project.eobrazovanje.service.interfaces.StudentServiceInterface;
-import tseo.project.eobrazovanje.service.interfaces.UserServiceInterface;
+import tseo.project.eobrazovanje.service.StudentServiceInterface;
+import tseo.project.eobrazovanje.service.UserServiceInterface;
+import tseo.project.eobrazovanje.service.impl.ChatBotIdentitetService;
+import tseo.project.eobrazovanje.service.impl.StudentService;
 
 @RestController
 @RequestMapping("/api/users")

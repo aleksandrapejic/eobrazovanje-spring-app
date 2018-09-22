@@ -23,12 +23,12 @@ import tseo.project.eobrazovanje.dto.IspitDto;
 import tseo.project.eobrazovanje.entity.Ispit;
 import tseo.project.eobrazovanje.entity.NotificationBot;
 import tseo.project.eobrazovanje.entity.Prijava;
-import tseo.project.eobrazovanje.service.BotCommandsService;
-import tseo.project.eobrazovanje.service.IspitService;
-import tseo.project.eobrazovanje.service.NastavnikService;
-import tseo.project.eobrazovanje.service.PredmetService;
-import tseo.project.eobrazovanje.service.PrijavaService;
-import tseo.project.eobrazovanje.service.StudentService;
+import tseo.project.eobrazovanje.service.impl.BotCommandsService;
+import tseo.project.eobrazovanje.service.impl.IspitService;
+import tseo.project.eobrazovanje.service.impl.NastavnikService;
+import tseo.project.eobrazovanje.service.impl.PredmetService;
+import tseo.project.eobrazovanje.service.impl.PrijavaService;
+import tseo.project.eobrazovanje.service.impl.StudentService;
 import tseo.project.eobrazovanje.util.BeanUtil;
 
 @RestController

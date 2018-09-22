@@ -1,4 +1,4 @@
-package tseo.project.eobrazovanje.service;
+package tseo.project.eobrazovanje.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,7 +23,7 @@ import tseo.project.eobrazovanje.entity.Student;
 import tseo.project.eobrazovanje.entity.User;
 import tseo.project.eobrazovanje.enumeration.Role;
 import tseo.project.eobrazovanje.repository.StudentRepository;
-import tseo.project.eobrazovanje.service.interfaces.StudentServiceInterface;
+import tseo.project.eobrazovanje.service.StudentServiceInterface;
 import tseo.project.eobrazovanje.util.BeanUtil;
 
 @Service

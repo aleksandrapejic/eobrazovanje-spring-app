@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tseo.project.eobrazovanje.dto.PredispitneObavezeDto;
 import tseo.project.eobrazovanje.entity.PredispitneObaveze;
-import tseo.project.eobrazovanje.service.NastavnikService;
-import tseo.project.eobrazovanje.service.PredispitneObavezeSablonService;
-import tseo.project.eobrazovanje.service.PredispitneObavezeService;
-import tseo.project.eobrazovanje.service.PredmetService;
-import tseo.project.eobrazovanje.service.PrijavaService;
-import tseo.project.eobrazovanje.service.StudentService;
+import tseo.project.eobrazovanje.service.impl.NastavnikService;
+import tseo.project.eobrazovanje.service.impl.PredispitneObavezeSablonService;
+import tseo.project.eobrazovanje.service.impl.PredispitneObavezeService;
+import tseo.project.eobrazovanje.service.impl.PredmetService;
+import tseo.project.eobrazovanje.service.impl.PrijavaService;
+import tseo.project.eobrazovanje.service.impl.StudentService;
 
 @RestController
 @RequestMapping("/api/predispitne-obaveze")

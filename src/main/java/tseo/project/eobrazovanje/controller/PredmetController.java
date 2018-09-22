@@ -24,10 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 import tseo.project.eobrazovanje.dto.IspitDto;
 import tseo.project.eobrazovanje.entity.Ispit;
 import tseo.project.eobrazovanje.entity.Predmet;
-import tseo.project.eobrazovanje.service.interfaces.IspitServiceInterface;
-import tseo.project.eobrazovanje.service.interfaces.NastavnikServiceInterface;
-import tseo.project.eobrazovanje.service.interfaces.PredmetServiceInterface;
-import tseo.project.eobrazovanje.service.interfaces.StudentServiceInterface;
+import tseo.project.eobrazovanje.service.IspitServiceInterface;
+import tseo.project.eobrazovanje.service.NastavnikServiceInterface;
+import tseo.project.eobrazovanje.service.PredmetServiceInterface;
+import tseo.project.eobrazovanje.service.StudentServiceInterface;
 
 @RestController
 @RequestMapping("/api/predmeti")
