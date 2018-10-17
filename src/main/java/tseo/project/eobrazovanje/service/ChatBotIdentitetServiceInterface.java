@@ -18,7 +18,7 @@ public interface ChatBotIdentitetServiceInterface {
 
 	ChatBotIdentitet findOneByChatId(Long chatId);
 
-	ChatBotIdentitet updateChatBotIdentitetPretplata(ChatBotIdentitet chatIdentitet, boolean subscribedTelegram);
+	ChatBotIdentitet updateChatBotIdentitetSubscribe(ChatBotIdentitet chatIdentitet, boolean subscribedTelegram);
 
 	ChatBotIdentitet save(Update update, Student student);
 

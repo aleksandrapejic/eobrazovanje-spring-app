@@ -28,9 +28,7 @@ public class AdminController {
 	AdminService adminService;
 
 	
-	/** ej sta radis__* nemoj nist askidati sa githaba itd to je prastaro tamo
-	 * Hteo sam da vidim promene
-	 * aha okej cekiraj 
+	/**
 	 * Returns a ResponseEntity with the body containing a 
 	 * list of all Admin objects. 
 	 *

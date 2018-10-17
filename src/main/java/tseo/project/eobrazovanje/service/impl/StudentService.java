@@ -77,8 +77,12 @@ public class StudentService implements StudentServiceInterface {
 				student.setAdresa(dto.getAdresa());
 			if (!dto.getBrojIndexa().equals(""))
 				student.setBrojIndexa(dto.getBrojIndexa());
-			if (!dto.getBrojTelefona().equals(""))
+			if (!dto.getBrojTelefona().equals("") && !dto.getBrojTelefona().equals(student.getBrojTelefona())){
+				
+				student.setChatbotIdentitet(null);
 				student.setBrojTelefona(dto.getBrojTelefona());
+			}
+			
 			
 			return save(student);
 		}
@@ -125,8 +129,6 @@ public class StudentService implements StudentServiceInterface {
 	public Student create(Student student) {
 		return changePassword(student);
 	}
-//////////////////////////////////////////BOT COMMANDS ///////////////////////////////////////////////////////
-
 	
 	@Override
 	public Student findOneByBrojTelefona(String broj) {
@@ -151,7 +153,7 @@ public class StudentService implements StudentServiceInterface {
 		ChatBotIdentitet chatBotIdentitet = BeanUtil.getChatIdentitetService().findOneByUser(student);
 		if(chatBotIdentitet != null){
 
-			BeanUtil.getChatIdentitetService().updateChatBotIdentitetPretplata(chatBotIdentitet, subscribedTelegram);
+			BeanUtil.getChatIdentitetService().updateChatBotIdentitetSubscribe(chatBotIdentitet, subscribedTelegram);
 			
 		}
 		else{

@@ -52,15 +52,21 @@ public class PrijavaService implements PrijavaServiceInterface {
 	public Boolean delete(Long id) {
 		Prijava prijava = prijavaRepository.findOne(id);
 		Student student = prijava.getStudent();
+		System.out.println(student);
 		if (student == null || prijava == null) {
 			return null;
 		}
 		if (student.getStanje() == null) {
 			student.setStanje(0d);
 		}
+		System.out.println("stigao sam do ste stanje studentu");
 		student.setStanje(student.getStanje() + 200);
 		studentService.save(student);
+		System.out.println("sacuvaj sam stanje studenta");
+		System.out.println(id );
+		
 		prijavaRepository.delete(id);
+		
 		return true;
 	}
 
@@ -150,6 +156,10 @@ public class PrijavaService implements PrijavaServiceInterface {
 	
 	@Override
 	public List<Prijava> getPrijavljeniIspiti(Student student) {
+		return prijavaRepository.findByStudent(student);
+	}
+
+	public List<Prijava> getPrijavaByStudent(Student student) {
 		return prijavaRepository.findByStudent(student);
 	}
 	

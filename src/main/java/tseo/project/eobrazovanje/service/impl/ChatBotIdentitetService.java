@@ -36,17 +36,14 @@ public class ChatBotIdentitetService implements ChatBotIdentitetServiceInterface
 	@Override
 	public ChatBotIdentitet save(Update update, Student student) {
 		
-		
 		ChatBotIdentitet chatIdentitet = new ChatBotIdentitet();
-		
 		chatIdentitet.setChatId(update.getMessage().getChatId());
 		chatIdentitet.setUserId(student);
 
-		
 		return repo.save(chatIdentitet);
 	}
 
-	
+	@Override
 	public Boolean delete(Long id) {
 		
 		repo.delete(id);
@@ -60,11 +57,9 @@ public class ChatBotIdentitetService implements ChatBotIdentitetServiceInterface
 	}
 	
 	@Override
-	public ChatBotIdentitet updateChatBotIdentitetPretplata(ChatBotIdentitet chatIdentitet, boolean subscribedTelegram) {
+	public ChatBotIdentitet updateChatBotIdentitetSubscribe(ChatBotIdentitet chatIdentitet, boolean subscribedTelegram) {
 
-		 System.out.println("cuvam pretplacenost upravo u chatbotidentitet");
 		chatIdentitet.setSubscribedTelegram(subscribedTelegram);
-		
 		return repo.save(chatIdentitet);
 	}
 

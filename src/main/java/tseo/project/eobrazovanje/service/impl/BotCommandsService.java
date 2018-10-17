@@ -19,17 +19,18 @@ import tseo.project.eobrazovanje.entity.Ispit;
 import tseo.project.eobrazovanje.entity.Predmet;
 import tseo.project.eobrazovanje.entity.Prijava;
 import tseo.project.eobrazovanje.entity.Student;
+import tseo.project.eobrazovanje.service.BotCommandsServiceInterface;
 import tseo.project.eobrazovanje.util.BeanUtil;
 
 @Service
-public class BotCommandsService  {
+public class BotCommandsService  implements BotCommandsServiceInterface{
 
-	public static final String POLOZENI_ISPITI = "Polozeni ispiti";
+	public static final String POLOŽENI_ISPITI = "Položeni ispiti";
 	public static final String PRIJAVLJENI_ISPITI = "Prijavljeni ispiti";
 	public static final String ISPITI_ZA_PRIJAVU = "Ispiti za prijavu";
-	public static final String STANJE_RACUNA = "Stanje na racunu";
+	public static final String STANJE_RAČUNA = "Stanje na računu";
 	public static final String START = "/start";
-	public static final String BROJ_TELEFONA = "Posalji svoj broj telefona";
+	public static final String BROJ_TELEFONA = "Pošalji svoj broj telefona";
 	public static final String MENI = "meni";
 	
 	
@@ -54,9 +55,12 @@ public class BotCommandsService  {
         return BeanUtil.getChatIdentitetService();
     }
 	
-
 	
-	// standardna tastatura za korisnike sa menijem
+	/**
+	 * Returns an ReplyKeyboardMarkup object with menu options.
+	 *
+	 */
+	@Override
 	public ReplyKeyboardMarkup getKeyboardMenuOptions(){
 	
 	    ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
@@ -64,68 +68,70 @@ public class BotCommandsService  {
 	    KeyboardRow row = new KeyboardRow();
 	    KeyboardRow row2 = new KeyboardRow();
 	    row.add(ISPITI_ZA_PRIJAVU);
-	    row.add(POLOZENI_ISPITI);
+	    row.add(POLOŽENI_ISPITI);
 	    keyboard.add(row);
-	    row2.add(STANJE_RACUNA);
+	    row2.add(STANJE_RAČUNA);
 	    row2.add(PRIJAVLJENI_ISPITI);
 	    keyboard.add(row2);
 	    keyboardMarkup.setKeyboard(keyboard);
-	    // Add it to the message
 	   return keyboardMarkup;
 		
 	}
 	
-	// tastatura za korisnike koji treba da ostave broj i potvrde identitet
+	/**
+	 * Returns a ReplyKeyboardMarkup object with menu options.
+	 *
+	 */
+	@Override
 	public ReplyKeyboardMarkup getKeyboardForPhoneNumber(){
 		
 		ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
 	    replyKeyboardMarkup.setSelective(true);
 	    replyKeyboardMarkup.setResizeKeyboard(true);
 	    replyKeyboardMarkup.setOneTimeKeyboard(true);
-
-	    // new list
 	    List<KeyboardRow> keyboard = new ArrayList<>();
-
-	    // first keyboard line
 	    KeyboardRow keyboardFirstRow = new KeyboardRow();
 	    KeyboardButton keyboardButton = new KeyboardButton();
 	    keyboardButton.setText(BROJ_TELEFONA).setRequestContact(true);
 	    keyboardFirstRow.add(keyboardButton);
-
-	    // add array to list
 	    keyboard.add(keyboardFirstRow);
-
-	    // add list to our keyboard
 	    replyKeyboardMarkup.setKeyboard(keyboard);
 
 	    
 	    return replyKeyboardMarkup;
 	}
 	
-	
+	/**
+	 * Save and return a ChatBotIdentitet object.
+	 *
+	 */
+	@Override
 	public ChatBotIdentitet saveChatIdentitet(Update update, Student student){
 		return getChatIdentitetService().save(update, student);
 	}
 	
 
-	// identifikacija i slanje menija 
+
+	/**
+	 * Checks if there is a student with shared phone number from Update object, if the number is correct but
+	 * chatbotidentitet doesn't exist, makes a new chatbotIdentitet.
+	 * Returns a menu message or a failed identification message.
+	 *
+	 */
+	@Override
 	public SendMessage sendMessagePotvrdaIMeni(Update update){
 		
 		  Contact contact = update.getMessage().getContact();
-		  System.out.println(contact + "dosao sam do studenta POTVRDA I MENI");
 		  Student student = getStudentService().findOneByBrojTelefona(contact.getPhoneNumber());
-		  System.out.println(student  +"evo studenta");
-		  // cuvane kontakta u bazi kao chatbotidentitet
-		 
 		 
 		  if(student != null){
 			  if(getChatIdentitetService().findOneByUser(student) != null){
 			
 					Long chatId = update.getMessage().getChatId();                             
 				    String firstName = update.getMessage().getContact().getFirstName();		 
-				    SendMessage message = new SendMessage() // Create a message object object
+				    SendMessage message = new SendMessage() 
 		                       .setChatId(chatId)
-				               .setText("Dobrodosao/la nazad  " + firstName +  ", ovo je tvoj meni.");			  
+				               .setText("Dobrodošao/la nazad  " + firstName +  ", ovo je tvoj meni.");			  
 				    message.setReplyMarkup(getKeyboardMenuOptions());  
 				    return message;			  
 			  }
@@ -138,28 +144,30 @@ public class BotCommandsService  {
 				    String firstName = update.getMessage().getContact().getFirstName();		 
 				    SendMessage message = new SendMessage() 
 		                       .setChatId(chatId)
-				               .setText("Dobrodosao/la na chat bot E-Obrazovanja " + firstName +  ", ovo je tvoj meni.");			  
+				               .setText("Dobrodošao/la na chat bot E-Obrazovanja " + firstName +  ", ovo je tvoj meni.");			  
 				    message.setReplyMarkup(getKeyboardMenuOptions());  
 				    return message;	
 			  }			  	   			    
 		  }else{
-			  System.out.println("usao sam u else nesto ne valja");
 			  return sendMessageNonExistentNumber(update);				
 		  }
 		
 	  }
 
 	
-	// kod za pravljenje nove poruke kao sablon ??
+
+	/**
+	 * Checks if chatbotIdentitet exists in the database by chatId.
+	 * Returns a message with polozeni ispiti or a failed identification message.
+	 *
+	 */
+	@Override
 	public SendMessage sendMessagePolozeniIspiti(Update update, Long chatId){
 		
-		System.out.println(  "evo ga student, ulazim u polozene ispite i  " + chatId);
 		ChatBotIdentitet chatBotIdentitet = getChatIdentitetService().findOneByChatId(chatId);
 		
 		if(chatBotIdentitet != null){
-			System.out.println(  "evo ga student, ulazim u polozene ispite i  " + chatBotIdentitet.getFirstName());
 			
-			System.out.println(chatBotIdentitet.getFirstName() + "evo ga student, ulazim u polozene ispite ");
 			Student student = getStudentService().findOne((chatBotIdentitet.getUser().getId()));
 			Set<Predmet> polozeniPredmeti = getPredmetService().getPolozeniPredmeti(student);
 			String predmeti = "";
@@ -168,31 +176,40 @@ public class BotCommandsService  {
 				
 				predmeti += "| " + predmet.toString() + " | " + "\n";
 			}			
-		    SendMessage message = new SendMessage() 
-		                    .setChatId(update.getMessage().getChatId())
-		                    .setText("POLOZENI ISPITI: " + predmeti);
-		    message.setReplyMarkup(getKeyboardMenuOptions());    
-		    
-		    return message; 		
+			if(predmeti.equals("")){
+			    SendMessage message = new SendMessage() 
+			                    .setChatId(update.getMessage().getChatId())
+			                    .setText("Trenutno nemate položenih ispita.");
+			    message.setReplyMarkup(getKeyboardMenuOptions());    
+			    return message; 
+			}else{
+				SendMessage message = new SendMessage() 
+	                    .setChatId(update.getMessage().getChatId())
+	                    .setText("POLOŽENI ISPITI: " + predmeti);
+				message.setReplyMarkup(getKeyboardMenuOptions());    
+				return message; 
+				
+			} 		
 			
 		}
 		else{
-			System.out.println("nema identitet, botcommand polozeni ispiti");
 			 return sendMessageNonExistentNumber(update);				
 		}
 		
 	}
 	
-	// kod za pravljenje nove poruke kao sablon ??
+	/**
+	 * Checks if chatbotIdentitet exists in the database by chatId.
+	 * Returns a message with polozeni ispiti or a failed identification message.
+	 *
+	 */
+	@Override
 	public SendMessage sendMessagePrijavljeniIspiti(Update update, Long chatId){
 		
-		System.out.println(  "evo ga student, ulazim u prijaveljne ispite i  " + chatId);
 		ChatBotIdentitet chatBotIdentitet = getChatIdentitetService().findOneByChatId(chatId);
 		
 		if(chatBotIdentitet != null){
 			
-			
-			System.out.println(chatBotIdentitet.getFirstName() + "BotCommand: sendMessagePrijavljeniIspiti metoda, pronašao sam chatidentitet studenta");
 			Student student = getStudentService().findOne((chatBotIdentitet.getUser().getId()));
 			List<Prijava> prijavljeniIspiti = getPrijavaService().getPrijavljeniIspiti(student);
 			String prijave = "";
@@ -201,34 +218,42 @@ public class BotCommandsService  {
 				
 				prijave += "| " + p.getIspit().toString() + " | " + "\n";
 			}			
-		    SendMessage message = new SendMessage() 
-		                    .setChatId(update.getMessage().getChatId())
-		                    .setText("PRIJAVLJENI ISPITI: " + prijave);
-		    message.setReplyMarkup(getKeyboardMenuOptions());    
-		    
-		    return message; 		
+			if(prijave.equals("")){
+			    SendMessage message = new SendMessage() 
+			                    .setChatId(update.getMessage().getChatId())
+			                    .setText("Trenutno nemate prijavljenih ispita.");
+			    message.setReplyMarkup(getKeyboardMenuOptions());    
+			    return message; 
+			}else{
+				SendMessage message = new SendMessage() 
+	                    .setChatId(update.getMessage().getChatId())
+	                    .setText("PRIJAVLJENI ISPITI: " + prijave);
+				message.setReplyMarkup(getKeyboardMenuOptions());    
+				return message; 
+				
+			}
 			
 		}
 		else{
-			
+				
 			 return sendMessageNonExistentNumber(update);				
-		}
-		
+			}
+			
 	}
 	
 	
-
-	// kod za pravljenje nove poruke kao sablon 
+	/**
+	 * Checks if chatbotIdentitet exists in the database by chatId.
+	 * Returns a message with ispiti za prijavu or a failed identification message.
+	 *
+	 */
+	@Override
 	public SendMessage sendMessageIspitiZaPrijavu(Update update, Long chatId){
 		
-		
-		System.out.println(  "evo ga student, ulazim u ispite za prijavu i  " + chatId);
 		ChatBotIdentitet chatBotIdentitet = getChatIdentitetService().findOneByChatId(chatId);
 		
 		if(chatBotIdentitet != null){
 			
-		
-			System.out.println(chatBotIdentitet.getFirstName() + "BotCommand: sendMessageIspitiZaPrijavu metoda, pronašao sam chatidentitet studenta");
 			Student student = getStudentService().findOne((chatBotIdentitet.getUser().getId()));
 			List<Ispit> ispitiZaPrijavu = getIspitService().ispitiZaPrijavu(student);
 			String ispiti = "";
@@ -236,14 +261,25 @@ public class BotCommandsService  {
 			for(Ispit ispit: ispitiZaPrijavu){
 				
 				ispiti += "| " + ispit.toString() + " | " + "\n";
-			}			
-		    SendMessage message = new SendMessage() 
-		                    .setChatId(update.getMessage().getChatId())
-		                    .setText("ISPITI ZA PRIJAVU: " + ispiti);
-		    message.setReplyMarkup(getKeyboardMenuOptions());    
-		    
-		    return message; 		
+			}	
 			
+			if(ispiti.equals("")){
+			    SendMessage message = new SendMessage() 
+			                    .setChatId(update.getMessage().getChatId())
+			                    .setText("Trenutno nemate ispite za prijavu.");
+			    message.setReplyMarkup(getKeyboardMenuOptions());    
+			    
+			    return message; 
+			}else{
+				
+				SendMessage message = new SendMessage() 
+	                    .setChatId(update.getMessage().getChatId())
+	                    .setText("ISPITI ZA PRIJAVU: " + ispiti);
+				message.setReplyMarkup(getKeyboardMenuOptions());    
+	    
+				return message; 
+				
+			}
 		}
 		else{
 			
@@ -255,17 +291,21 @@ public class BotCommandsService  {
 	
 	}
 	
-	// kod za pravljenje nove poruke kao sablon 
+	
+	/**
+	 * Checks if chatbotIdentitet exists in the database by chatId.
+	 * Returns a message with stanje racuna or a failed identification message.
+	 *
+	 */
+	@Override
 	public SendMessage sendMessageStanjeRacuna(Update update, Long chatId){
 		ChatBotIdentitet chatBotIdentitet = getChatIdentitetService().findOneByChatId(chatId);
 		if(chatBotIdentitet != null){
-			
-			
+		
 			Student student = getStudentService().findOne((chatBotIdentitet.getUser().getId()));
-			
 		    SendMessage message = new SendMessage() 
 		                    .setChatId(update.getMessage().getChatId())
-		                    .setText("STANJE VASEG RACUNA JE: " + student.getStanje() + " RSD");
+		                    .setText("STANJE VAŠEG RAČUNA JE: " + student.getStanje() + " RSD");
 		    message.setReplyMarkup(getKeyboardMenuOptions());    
 		    
 		    return message; 
@@ -275,20 +315,31 @@ public class BotCommandsService  {
 		}
 	}
 	
+	
+	/**
+	 *
+	 * Returns a start message.
+	 *
+	 */
+	@Override
 	public SendMessage sendMessageStart(Update update){
 		SendMessage message = new SendMessage() 
 						.setChatId(update.getMessage().getChatId())
-						.setText("Dobrodosao/la na chat bot E-Obrazovanja. Potrebno je da podelite vas broj telefona kako bismo vas identifikovali.");
+						.setText("Dobrodošao/la na chat bot E-Obrazovanja. Potrebno je da podelite vaš broj telefona kako bismo vas identifikovali.");
 		message.setReplyMarkup(getKeyboardForPhoneNumber()); 
 		
 		return message;
 	}
-	
-	
+	/**
+	 *
+	 * Returns a failed identification message.
+	 *
+	 */
+	@Override
 	public SendMessage sendMessageNonExistentNumber(Update update){
 		SendMessage message = new SendMessage() 
 						.setChatId(update.getMessage().getChatId())
-						.setText("Identifikacija neuspesna. Molimo vas da proverite da li je vas kontakt na web stranici E-Obrazovanja ispravan.");
+						.setText("Identifikacija neuspešna. Molimo vas da proverite da li je vaš kontakt na web stranici E-Obrazovanja ispravan, zatim pokušajte ponovo.");
 		message.setReplyMarkup(getKeyboardForPhoneNumber()); 
 		
 		return message;

@@ -22,6 +22,7 @@ import tseo.project.eobrazovanje.dto.PrijavaDto;
 import tseo.project.eobrazovanje.entity.NotificationBot;
 import tseo.project.eobrazovanje.entity.Prijava;
 import tseo.project.eobrazovanje.entity.Student;
+import tseo.project.eobrazovanje.entity.User;
 import tseo.project.eobrazovanje.service.IspitServiceInterface;
 import tseo.project.eobrazovanje.service.NastavnikServiceInterface;
 import tseo.project.eobrazovanje.service.PrijavaServiceInterface;
@@ -44,7 +45,25 @@ public class PrijavaController {
 
 	@Autowired
 	StudentServiceInterface studentService;
-
+	
+	
+	/**
+	 * Returns a NotificationBot from context 
+	 *
+	 */
+	private NotificationBot getBot() {
+		
+		return BeanUtil.getBot();
+	}
+	
+	/**
+	 * Returns a list of Prijave objects. 
+	 *
+	 * 
+	 * @return      		ResponseEntity with the body containing the
+	 * 						list of Prijave objects
+	 * @see         		Prijava
+	 */
 	@GetMapping
 	public ResponseEntity getAll(Pageable pageable) {
 
@@ -55,7 +74,16 @@ public class PrijavaController {
 		return ResponseEntity.ok().headers(headers).body(prijave.getContent());
 
 	}
-
+	
+	/**
+	 * Returns a Prijava object based on id. 
+	 *
+	 * 
+	 * @param	      		id
+	 * @return				ResponseEntity with the body containing Prijava object
+	 * 						based on the id.
+	 * @see         		Prijava
+	 */
 	@GetMapping("/{id}")
 	public ResponseEntity getOne(@PathVariable("id") long id) {
 		Prijava prijava = prijavaService.findOne(id);
@@ -66,6 +94,15 @@ public class PrijavaController {
 		}
 	}
 
+	/**
+	 * Returns a new Prijava object. 
+	 *
+	 * 
+	 * @param	      		dto
+	 * @return				ResponseEntity with the body containing new Prijava object
+	 * 						made from dto
+	 * @see         		Prijava
+	 */
 	@PostMapping
 	@PreAuthorize("hasAuthority('STUDENT')")
 	public ResponseEntity postOne(@Validated @RequestBody PrijavaDto dto, Errors errors) {
@@ -80,7 +117,15 @@ public class PrijavaController {
 		}
 		return new ResponseEntity(prijava, HttpStatus.CREATED);
 	}
-
+	/**
+	 * Returns a NO_CONTENT status after deleting a Prijava object. 
+	 *
+	 * 
+	 * @param	      		id
+	 * @return				ResponseEntity with the NO_CONTENT status, after deleting a Prijava object
+	 * 						based on the id.
+	 * @see         		Prijava
+	 */
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasAuthority('STUDENT')")
 	public ResponseEntity deleteOne(@PathVariable("id") long id) {
@@ -90,7 +135,16 @@ public class PrijavaController {
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
 	}
-
+	
+	/**
+	 * Returns a Prijava object based on id and sends a notification using NotificationBot. 
+	 *
+	 * 
+	 * @param	      		dto
+	 * @return				ResponseEntity with the body containing Prijava object
+	 * 						based on the dto.
+	 * @see         		Prijava
+	 */
 	@PutMapping("/{id}")
 	@PreAuthorize("hasAuthority('NASTAVNIK')")
 	public ResponseEntity putOne(@PathVariable("id") long id, @Validated @RequestBody PrijavaDto dto, Errors errors) {
@@ -105,9 +159,7 @@ public class PrijavaController {
 				return new ResponseEntity(HttpStatus.BAD_REQUEST);
 			} else {
 				if(prijava.isOcenjeno()){
-					System.out.println("dosao sam do slanja notif o oceni");
-					Student student = studentService.findOne(dto.getStudent());
-					
+					Student student = studentService.findOne(dto.getStudent());					
 					getBot().posaljiObavestenje(prijava, student );
 				}
 				return new ResponseEntity(prijava, HttpStatus.CREATED);
@@ -115,9 +167,6 @@ public class PrijavaController {
 		}
 	}
 
-	private NotificationBot getBot() {
-		
-		return BeanUtil.getBot();
-	}
+
 
 }

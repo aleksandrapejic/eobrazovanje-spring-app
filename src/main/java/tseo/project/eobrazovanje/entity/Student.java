@@ -35,7 +35,7 @@ public class Student extends User {
 	@JoinTable(name = "predmet_studenti")
 	@JsonIgnore
 	private Set<Predmet> predmeti;
-	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonIgnore
 	private Set<Prijava> prijave;
 	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -44,6 +44,7 @@ public class Student extends User {
 	@Column(unique=true)
 	private String brojTelefona;
 	@OneToOne
+	@JsonIgnore
 	private ChatBotIdentitet chatbotIdentitet;
 	
 

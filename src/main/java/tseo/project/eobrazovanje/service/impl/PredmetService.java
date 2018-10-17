@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import ch.qos.logback.core.joran.util.beans.BeanUtil;
 import tseo.project.eobrazovanje.entity.Nastavnik;
 import tseo.project.eobrazovanje.entity.Predmet;
 import tseo.project.eobrazovanje.entity.Prijava;
@@ -30,6 +31,10 @@ public class PredmetService implements PredmetServiceInterface {
 
 	@Autowired
 	IspitService ispitiService;
+	
+	@Autowired
+	PrijavaService prijavaService;
+
 
 	@Override
 	public Page<Predmet> findAll(String naziv, Pageable pageable) {
@@ -116,7 +121,8 @@ public class PredmetService implements PredmetServiceInterface {
 
 	@Override
 	public Set<Predmet> getPolozeniPredmeti(Student student) {
-		Set<Prijava> prijave = student.getPrijave();
+		List<Prijava> prijave = prijavaService.getPrijavaByStudent(student);
+		
 		Set<Predmet> polozeniPredmeti = new HashSet<>();
 		for (Prijava prijava : prijave) {
 			if (prijava.isPolozio()) {

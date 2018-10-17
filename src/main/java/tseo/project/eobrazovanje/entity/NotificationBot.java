@@ -12,10 +12,10 @@ import tseo.project.eobrazovanje.util.BeanUtil;
 @Component
 public class NotificationBot extends TelegramLongPollingBot  {
 	
-	public static final String POLOZENI_ISPITI = "Polozeni ispiti";
+	public static final String POLOŽENI_ISPITI = "Položeni ispiti";
 	public static final String PRIJAVLJENI_ISPITI = "Prijavljeni ispiti";
 	public static final String ISPITI_ZA_PRIJAVU = "Ispiti za prijavu";
-	public static final String STANJE_RACUNA = "Stanje na racunu";
+	public static final String STANJE_RAČUNA = "Stanje na računu";
 	public static final String START = "/start";
 	public static final String BROJ_TELEFONA = "Posalji svoj broj telefona";
 	public static final String MENI = "meni";
@@ -66,7 +66,7 @@ public class NotificationBot extends TelegramLongPollingBot  {
         						SendMessage sendMessage = getBotCommandsService().sendMessagePotvrdaIMeni(update);        					    
         					
 			        			  try {
-			        			      execute(sendMessage); // Sending our message object to user
+			        			      execute(sendMessage); 
 			        			        
 			        			  } catch (TelegramApiException e) {
 			        			        e.printStackTrace();
@@ -79,18 +79,17 @@ public class NotificationBot extends TelegramLongPollingBot  {
         					 SendMessage sendMessage = getBotCommandsService().sendMessageIspitiZaPrijavu(update, chatid);        					    
         					
 		        			 try {
-		        			      execute(sendMessage); // Sending our message object to user
-		        			        
+		        			      execute(sendMessage); 
 		        			  } catch (TelegramApiException e) {
 		        			        e.printStackTrace();
 		        			  }
 	        			    
-        				}else if(messageText.equals(POLOZENI_ISPITI)){
+        				}else if(messageText.equals(POLOŽENI_ISPITI)){
         					System.out.println(chatid);
         					SendMessage sendMessage = getBotCommandsService().sendMessagePolozeniIspiti(update, chatid);        					    
          					
 	 		        		try {
-	 		        			      execute(sendMessage); // Sending our message object to user
+	 		        			      execute(sendMessage); 
 	 		        			        
 	 		        			  } catch (TelegramApiException e) {
 	 		        			        e.printStackTrace();
@@ -105,19 +104,19 @@ public class NotificationBot extends TelegramLongPollingBot  {
         					SendMessage sendMessage = getBotCommandsService().sendMessagePrijavljeniIspiti(update, chatid);        					    
          					
 	 		        		try {
-	 		        			      execute(sendMessage); // Sending our message object to user
+	 		        			      execute(sendMessage); 
 	 		        			        
 	 		        			  } catch (TelegramApiException e) {
 	 		        			        e.printStackTrace();
 	 		        			  }
         				 
         				}
-        				else if(messageText.equals(STANJE_RACUNA)){
+        				else if(messageText.equals(STANJE_RAČUNA)){
         					System.out.println(chatid);
         					SendMessage sendMessage = getBotCommandsService().sendMessageStanjeRacuna(update, chatid);        					    
          					
 	 		        		try {
-	 		        			      execute(sendMessage); // Sending our message object to user
+	 		        			      execute(sendMessage); 
 	 		        			        
 	 		        			  } catch (TelegramApiException e) {
 	 		        			        e.printStackTrace();

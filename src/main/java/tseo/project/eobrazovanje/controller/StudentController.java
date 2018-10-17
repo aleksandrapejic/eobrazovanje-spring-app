@@ -249,31 +249,23 @@ public class StudentController {
 	
 	@PutMapping("/{id}/broj-telefona")
 	@PreAuthorize("hasAuthority('STUDENT')")
-	public ResponseEntity changePhoneNumber(@PathVariable("id") long id, @Validated @RequestBody StudentDto studentdto,
-			Errors errors) {
-		if (errors.hasErrors()) {
-			return new ResponseEntity(errors.getAllErrors(), HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity changePhoneNumber(@PathVariable("id") long id, @Validated @RequestBody StudentDto studentdto
+			) {
+	
 		if (studentdto.getId() != id) {
 			return new ResponseEntity(HttpStatus.BAD_REQUEST);
 		} else {
-			String trenutniBroj = studentService.findOne(id).getBrojTelefona();
-			Student updateStudent = studentService.update(studentdto);
-			System.out.println("Student kontroler: " + trenutniBroj + "novi broj je " + updateStudent.getBrojTelefona() );
-			ChatBotIdentitet chatBotIdentitet = BeanUtil.getChatIdentitetService().findOneByUser(updateStudent);
-			if(chatBotIdentitet != null){
+	
+			Student student = studentService.findOne(studentdto.getId());
+			ChatBotIdentitet chatBotIdentitet = BeanUtil.getChatIdentitetService().findOneByUser(student);
+			
+			if(chatBotIdentitet != null){	
+				StudentDto dto = studentService.studentDtoMaker(studentService.update(studentdto));
 				BeanUtil.getChatIdentitetService().delete(chatBotIdentitet.getId());
-				StudentDto dto = studentService.studentDtoMaker(updateStudent);
-				//dto.setSubscribedTelegram(chatBotIdentitet.isSubscribedTelegram());
-				//dto.setChatId(chatBotIdentitet.getChatId());
-				System.out.println("chatbotidentitet nije null");
-				return new ResponseEntity(dto, HttpStatus.OK);
-				
+				return new ResponseEntity(dto, HttpStatus.OK);	
 			}
 			else{
-				System.out.println("chatbotidentitet jeste null");
-				StudentDto dto = studentService.studentDtoMaker(updateStudent);
-				
+				StudentDto dto = studentService.studentDtoMaker(studentService.update(studentdto));
 				return new ResponseEntity(dto, HttpStatus.OK);
 			}
 		
@@ -285,27 +277,20 @@ public class StudentController {
 	
 	@PutMapping("/{id}/telegram-prijava")
 	@PreAuthorize("hasAuthority('STUDENT')")
-	public ResponseEntity changeSubscriptionTelegram(@PathVariable("id") long id, @Validated @RequestBody StudentDto studentdto,
-			Errors errors) {
-		if (errors.hasErrors()) {
-			return new ResponseEntity(errors.getAllErrors(), HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity changeSubscriptionTelegram(@PathVariable("id") long id, @Validated @RequestBody StudentDto studentdto
+			) {
+	
 		if (studentdto.getId() != id) {
 			return new ResponseEntity(HttpStatus.BAD_REQUEST);
 		} else {
-	
-			System.out.println("Student kontroler: menjam prijavu studenta na bota" );
+			
 			Student student = studentService.findOne(studentdto.getId());
 			ChatBotIdentitet chatBotIdentitet = BeanUtil.getChatIdentitetService().findOneByUser(student);
 			if(chatBotIdentitet != null){
-				BeanUtil.getChatIdentitetService().updateChatBotIdentitetPretplata(chatBotIdentitet, studentdto.isSubscribedTelegram());
-				System.out.println("chatbotidentitet nije null i izmenjena je prijava na bota" + chatBotIdentitet.isSubscribedTelegram());
-				return new ResponseEntity(student, HttpStatus.OK);
-				
+				BeanUtil.getChatIdentitetService().updateChatBotIdentitetSubscribe(chatBotIdentitet, studentdto.isSubscribedTelegram());
+				return new ResponseEntity(studentdto, HttpStatus.OK);		
 			}
 			else{
-				System.out.println("chatbotidentitet jeste null");
-			
 				return new ResponseEntity(HttpStatus.BAD_REQUEST);
 			}
 		
